@@ -92,49 +92,52 @@ def format_sdg():
     'volGasSource'
     ]
     
-    outputDF = pd.DataFrame(matrix(data=np.nan, columns=length(outputDFNames), rows=length(fieldDataProc$waterSampleID)))
+    outputDF = robjects.r('matrix(data=np.nan, columns=length(outputDFNames), rows=length(fieldDataProc$waterSampleID)')
     outputDF.columns = outputDFNames
     
     
     #Populate the output file with field data
-    for(k in 1:length(names(outputDF))){
-    if(names(outputDF)[k] %in% names(fieldDataProc)){
-      outputDF[,k] <- fieldDataProc[,names(fieldDataProc) == names(outputDF)[k]]
-    }
-    outputDF$headspaceTemp <- fieldDataProc$storageWaterTemp
-    outputDF$barometricPressure <- fieldDataProc$ptBarometricPressure
-    outputDF$waterVolume <- fieldDataProc$waterVolumeSyringe
-    outputDF$gasVolume <- fieldDataProc$gasVolumeSyringe
-    outputDF$stationID <- fieldDataProc$namedLocation
-    }
-    
+
+    for k in 1,len(outputDF.columns):
+        if outputDF.columns[k] in fieldDataProc.columns:
+          outputDF[k] = fieldDataProc[fieldDataProc.columns == outputDF.columns[k]]
+
+        outputDF['headspaceTemp'] = fieldDataProc['storageWaterTemp']
+        outputDF['barometricPressure'] = fieldDataProc['ptBarometricPressure']
+        outputDF['waterVolume'] = fieldDataProc['waterVolumeSyringe']
+        outputDF['gasVolume'] = fieldDataProc['gasVolumeSyringe']
+        outputDF['stationID'] = fieldDataProc['namedLocation']
+
+
     #Populate the output file with external lab data
-    for(l in 1:length(outputDF$waterSampleID)){
-    try({
-      outputDF$concentrationCO2Air[l] <- externalLabData$concentrationCO2[externalLabData$sampleID == outputDF$referenceAirSampleID[l]]
-      outputDF$concentrationCO2Gas[l] <- externalLabData$concentrationCO2[externalLabData$sampleID == outputDF$equilibratedAirSampleID[l]]
-    }, silent = T)
-    try({
-      outputDF$concentrationCH4Air[l] <- externalLabData$concentrationCH4[externalLabData$sampleID == outputDF$referenceAirSampleID[l]]
-      outputDF$concentrationCH4Gas[l] <- externalLabData$concentrationCH4[externalLabData$sampleID == outputDF$equilibratedAirSampleID[l]]
-    }, silent = T)
-    try({
-      outputDF$concentrationN2OAir[l] <- externalLabData$concentrationN2O[externalLabData$sampleID == outputDF$referenceAirSampleID[l]]
-      outputDF$concentrationN2OGas[l] <- externalLabData$concentrationN2O[externalLabData$sampleID == outputDF$equilibratedAirSampleID[l]]
-    }, silent = T)
-    }
+    for l in 1,len(outputDF['waterSampleID']):
+        try:
+          outputDF['concentrationCO2Air'][l] = externalLabData['concentrationCO2'][externalLabData['sampleID'] == outputDF['referenceAirSampleID'][l]]
+        except NameError:
+          outputDF['concentrationCO2Gas'][l] = externalLabData['concentrationCO2'][externalLabData['sampleID'] == outputDF['equilibratedAirSampleID'][l]]
+
+        try:
+          outputDF['concentrationCH4Air'][l] = externalLabData['concentrationCH4'][externalLabData['sampleID'] == outputDF['referenceAirSampleID'][l]]
+        except NameError:
+          outputDF['concentrationCH4Gas'][l] = externalLabData['concentrationCH4'][externalLabData['sampleID'] == outputDF['equilibratedAirSampleID'][l]]
+
+        try:
+          outputDF['concentrationN2OAir'][l] <- externalLabData['concentrationN2O'][externalLabData['sampleID'] == outputDF['referenceAirSampleID'][l]]
+        except NameError:
+          outputDF['concentrationN2OGas'][l] <- externalLabData['concentrationN2O'][externalLabData['sampleID'] == outputDF['equilibratedAirSampleID'][l]]
+
     
     #Populate the output file with water temperature data for streams
-    for(m in 1:length(outputDF$waterSampleID)){
-    try(outputDF$waterTemp[m] <- fieldSuperParent$waterTemp[fieldSuperParent$parentSampleID == outputDF$waterSampleID[m]],silent = T)
-    if(is.na(outputDF$headspaceTemp[m])){
-      try(
-        outputDF$headspaceTemp[m] <- fieldSuperParent$waterTemp[fieldSuperParent$parentSampleID == outputDF$waterSampleID[m]],
-        silent = T)
-    }
-    }
+    for m in 1,len(outputDF['waterSampleID']):
+        try:
+            outputDF['waterTemp'][m] = fieldSuperParent['waterTemp'][fieldSuperParent['parentSampleID'] == outputDF['waterSampleID'][m]]
+        except NameError:
+            if pd.isna(outputDF['headspaceTemp'][m]):
+              try:
+                outputDF['headspaceTemp'][m] = fieldSuperParent['waterTemp'][fieldSuperParent['parentSampleID'] == outputDF['waterSampleID'][m]]
+
     
     #Flag values below detection (TBD)
     
     return(outputDF)
-    }
+
