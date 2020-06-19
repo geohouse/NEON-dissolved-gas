@@ -31,23 +31,40 @@ def format_sdg():
     print (volH2O + volGas) # testing code
     
     #Check if the data is loaded already using loadByProduct
-    if externalLabData and fieldDataProc and fieldSuperParent in locals() == False:
+    if not 'externalLabData' and 'fieldDataProc' and 'fieldSuperParent' in locals() == False:
         print("data is not loaded") # testing code
         
         #If not, stack field and external lab data
-        if os.path.isdir(re.sub("\\.zip","",data_dir)) == False:
+        if not os.path.isdir(re.sub("\\.zip", "", data_dir)):
             stackByTable(dpID = "DP1.20097.001", filepath = data_dir)
         
-        externalLabData = pd.read_csv(re.sub("\\.zip","",data_dir), "stackedFiles", "sdg_externalLabData.csv", sep = "/"), stringsAsFactors = F
-        fieldDataProc = pd.read_csv(re.sub("\\.zip","",data_dir), "stackedFiles", "sdg_fieldDataProc.csv", sep = "/"), stringsAsFactors = F
-        fieldSuperParent = pd.read_csv(re.sub("\\.zip","",data_dir), "stackedFiles", "sdg_fieldSuperParent.csv", sep = "/"), stringsAsFactors = F
-    
+        externalLabData = pd.read_csv(re.sub("\\.zip","",data_dir), "stackedFiles", "sdg_externalLabData.csv", sep = "/")
+        fieldDataProc = pd.read_csv(re.sub("\\.zip","",data_dir), "stackedFiles", "sdg_fieldDataProc.csv", sep = "/")
+        fieldSuperParent = pd.read_csv(re.sub("\\.zip","",data_dir), "stackedFiles", "sdg_fieldSuperParent.csv", sep = "/")
+
+        df_externalLabData = pd.DataFrame(externalLabData)
+        df_fieldDataProc = pd.DataFrame(fieldDataProc)
+        df_fieldSuperParent = pd.DataFrame(fieldSuperParent)
+
     print("Data is loaded") #testing code
     #Flag and set default field values
-    fieldDataProc$volH2OSource <- ifelse(is.na(fieldDataProc$waterVolumeSyringe),1,0)
-    fieldDataProc$volGasSource <- ifelse(is.na(fieldDataProc$gasVolumeSyringe),1,0)
-    fieldDataProc$waterVolumeSyringe[is.na(fieldDataProc$waterVolumeSyringe)] <- volH2O
-    fieldDataProc$gasVolumeSyringe[is.na(fieldDataProc$gasVolumeSyringe)] <- volGas
+
+    if pd.isna(df_fieldDataProc['waterVolumeSyringe']):
+        df_fieldDataProc['volH2OSource'] == 1
+    else:
+        df_fieldDataProc['volH2OSource'] == 0
+
+    if pd.isna(df_fieldDataProc['gasVolumeSyringe']):
+        df_fieldDataProc['volGasSource'] == 1
+    else:
+        df_fieldDataProc['volGasSource'] == 0
+
+    if df_fieldDataProc['waterVolumeSyringe'][pd.isna(fieldDataProc['waterVolumeSyringe'])]:
+        df_fieldDataProc['waterVolumeSyringe'][fieldDataProc['waterVolumeSyringe']] = volH2O
+
+    if df_fieldDataProc['gasVolumeSyringe'][pd.isna(fieldDataProc['gasVolumeSyringe'])]:
+        df_fieldDataProc['gasVolumeSyringe'][fieldDataProc['gasVolumeSyringe']] = volGas
+
     
     
     outputDFNames = [
