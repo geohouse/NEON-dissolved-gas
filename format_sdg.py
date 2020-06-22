@@ -61,13 +61,9 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
         df_fieldDataProc['volGasSource'] == 0
 
     df_fieldDataProc['waterVolumeSyringe'][pd.isna(fieldDataProc['waterVolumeSyringe'])] = volH2O
-        df_fieldDataProc['waterVolumeSyringe'][fieldDataProc['waterVolumeSyringe']] = volH2O
+    df_fieldDataProc['gasVolumeSyringe'][pd.isna(fieldDataProc['gasVolumeSyringe'])] = volGas
 
-    if df_fieldDataProc['gasVolumeSyringe'][pd.isna(fieldDataProc['gasVolumeSyringe'])]:
-        df_fieldDataProc['gasVolumeSyringe'][fieldDataProc['gasVolumeSyringe']] = volGas
 
-    
-    
     outputDFNames = [
     'waterSampleID',
     'referenceAirSampleID',
