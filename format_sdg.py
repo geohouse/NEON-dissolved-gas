@@ -3,10 +3,6 @@ import os
 import os.path
 import re
 
-import sklearn as sklearn
-import pandas as pd
-from sklearn import datasets
-
 import rpy2
 import rpy2.robjects as robjects
 from rpy2.robjects.packages import importr
@@ -15,16 +11,10 @@ base = importr('base')
 utils = importr('utils')
 stats = importr('stats')
 
-
 utils.install_packages('neonUtilities', repos='https://cran.rstudio.com/');
 neonUtilities = importr('neonUtilities')
 
-#Join data files: stackByTable()
-#neonUtilities.stackByTable(filepath='~/Downloads/NEON_dissolved-gases-surfacewater.zip');
-#Read downloaded and stacked files into Python
-##os.listdir('Downloads/filesToStack10003/stackedFiles/')
 # -----------------------------------------------------------------------------------------------#
-# data_dir = '/NEON_dissolved-gases-surfacewater.zip' #default
 
 
 def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip'):
