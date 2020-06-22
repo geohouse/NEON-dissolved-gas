@@ -25,8 +25,9 @@ neonUtilities = importr('neonUtilities')
 ##os.listdir('Downloads/filesToStack10003/stackedFiles/')
 # -----------------------------------------------------------------------------------------------#
 # data_dir = '/NEON_dissolved-gases-surfacewater.zip' #default
-def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip'):
 
+
+def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip'):
     ##### Default values #####
     volH2O = 40 #mL
     volGas = 20 #mL
@@ -43,25 +44,21 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
         fieldDataProc = pd.read_csv(re.sub("\\.zip", "", data_dir) + "/stackedFiles" + "/sdg_fieldDataProc.csv")
         fieldSuperParent = pd.read_csv(re.sub("\\.zip", "", data_dir) + "/stackedFiles" + "/sdg_fieldSuperParent.csv")
 
-        df_externalLabData = pd.DataFrame(externalLabData)
-        df_fieldDataProc = pd.DataFrame(fieldDataProc)
-        df_fieldSuperParent = pd.DataFrame(fieldSuperParent)
-
     print("Data is loaded") #testing code
     #Flag and set default field values
 
-    if pd.isna(df_fieldDataProc['waterVolumeSyringe']):
-        df_fieldDataProc['volH2OSource'] == 1
+    if pd.isna(fieldDataProc['waterVolumeSyringe']):
+        fieldDataProc['volH2OSource'] = 1
     else:
-        df_fieldDataProc['volH2OSource'] == 0
+        fieldDataProc['volH2OSource'] = 0
 
-    if pd.isna(df_fieldDataProc['gasVolumeSyringe']):
-        df_fieldDataProc['volGasSource'] == 1
+    if pd.isna(fieldDataProc['gasVolumeSyringe']):
+        fieldDataProc['volGasSource'] = 1
     else:
-        df_fieldDataProc['volGasSource'] == 0
+        fieldDataProc['volGasSource'] = 0
 
-    df_fieldDataProc['waterVolumeSyringe'][pd.isna(fieldDataProc['waterVolumeSyringe'])] = volH2O
-    df_fieldDataProc['gasVolumeSyringe'][pd.isna(fieldDataProc['gasVolumeSyringe'])] = volGas
+    fieldDataProc['waterVolumeSyringe'][pd.isna(fieldDataProc['waterVolumeSyringe'])] = volH2O
+    fieldDataProc['gasVolumeSyringe'][pd.isna(fieldDataProc['gasVolumeSyringe'])] = volGas
 
 
     outputDFNames = [
@@ -89,7 +86,7 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
     'volGasSource'
     ]
     
-    outputDF = robjects.r('matrix(data=np.nan, columns=length(outputDFNames), rows=length(fieldDataProc$waterSampleID)')
+    outputDF = robjects.r.matrix(data=pd.np.nan, ncol=len(outputDFNames), nrow=len(fieldDataProc['waterSampleID']))
     outputDF.columns = outputDFNames
     
     
@@ -111,17 +108,20 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
         try:
           outputDF['concentrationCO2Air'][l] = externalLabData['concentrationCO2'][externalLabData['sampleID'] == outputDF['referenceAirSampleID'][l]]
           outputDF['concentrationCO2Gas'][l] = externalLabData['concentrationCO2'][externalLabData['sampleID'] == outputDF['equilibratedAirSampleID'][l]]
+        except NameError:
+            pass
 
         try:
           outputDF['concentrationCH4Air'][l] = externalLabData['concentrationCH4'][externalLabData['sampleID'] == outputDF['referenceAirSampleID'][l]]
-        except NameError:
           outputDF['concentrationCH4Gas'][l] = externalLabData['concentrationCH4'][externalLabData['sampleID'] == outputDF['equilibratedAirSampleID'][l]]
+        except NameError:
+            pass
 
         try:
-          outputDF['concentrationN2OAir'][l] <- externalLabData['concentrationN2O'][externalLabData['sampleID'] == outputDF['referenceAirSampleID'][l]]
+          outputDF['concentrationN2OAir'][l] = externalLabData['concentrationN2O'][externalLabData['sampleID'] == outputDF['referenceAirSampleID'][l]]
+          outputDF['concentrationN2OGas'][l] = externalLabData['concentrationN2O'][externalLabData['sampleID'] == outputDF['equilibratedAirSampleID'][l]]
         except NameError:
-          outputDF['concentrationN2OGas'][l] <- externalLabData['concentrationN2O'][externalLabData['sampleID'] == outputDF['equilibratedAirSampleID'][l]]
-
+            pass
     
     #Populate the output file with water temperature data for streams
     for m in 1,len(outputDF['waterSampleID']):
@@ -129,10 +129,15 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
             outputDF['waterTemp'][m] = fieldSuperParent['waterTemp'][fieldSuperParent['parentSampleID'] == outputDF['waterSampleID'][m]]
         except NameError:
             if pd.isna(outputDF['headspaceTemp'][m]):
-              try:
-                outputDF['headspaceTemp'][m] = fieldSuperParent['waterTemp'][fieldSuperParent['parentSampleID'] == outputDF['waterSampleID'][m]]
-
+                try:
+                    outputDF['headspaceTemp'][m] = fieldSuperParent['waterTemp'][fieldSuperParent['parentSampleID'] == outputDF['waterSampleID'][m]]
+                except NameError:
+                    pass
     
     #Flag values below detection (TBD)
     
-     # return(outputDF)
+    return outputDF
+
+
+def main():
+    def_format_sdg()
