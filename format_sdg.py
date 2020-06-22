@@ -35,14 +35,13 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
     if 'externalLabData' and 'fieldDataProc' and 'fieldSuperParent' in locals() is False:
         print("data is not loaded")  # testing code
 
-        # If not, stack field and external lab data
+        # If data is not loaded, stack field and external lab data
         if os.path.isdir(re.sub("\\.zip", "", data_dir)) is False:
             neonUtilities.stackByTable(dpID="DP1.20097.001", filepath=data_dir)
 
-        externalLabData = pd.read_csv(re.sub("\\.zip", "", data_dir), "stackedFiles", "sdg_externalLabData.csv", sep="/")
-        fieldDataProc = pd.read_csv(re.sub("\\.zip", "", data_dir), "stackedFiles", "sdg_fieldDataProc.csv", sep="/")
-        fieldSuperParent = pd.read_csv(re.sub("\\.zip", "", data_dir), "stackedFiles", "sdg_fieldSuperParent.csv",
-                                       sep="/")
+        externalLabData = pd.read_csv(re.sub("\\.zip", "", data_dir) + "/stackedFiles" + "/sdg_externalLabData.csv")
+        fieldDataProc = pd.read_csv(re.sub("\\.zip", "", data_dir) + "/stackedFiles" + "/sdg_fieldDataProc.csv")
+        fieldSuperParent = pd.read_csv(re.sub("\\.zip", "", data_dir) + "/stackedFiles" + "/sdg_fieldSuperParent.csv")
 
         df_externalLabData = pd.DataFrame(externalLabData)
         df_fieldDataProc = pd.DataFrame(fieldDataProc)
