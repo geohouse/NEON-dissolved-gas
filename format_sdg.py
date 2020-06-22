@@ -11,36 +11,38 @@ import rpy2
 import rpy2.robjects as robjects
 from rpy2.robjects.packages import importr
 
-#utils.install_packages('neonUtilities', repos='https://cran.rstudio.com/');
+base = importr('base')
+utils = importr('utils')
+stats = importr('stats')
+
+
+utils.install_packages('neonUtilities', repos='https://cran.rstudio.com/');
 neonUtilities = importr('neonUtilities')
 
 #Join data files: stackByTable()
-neonUtilities.stackByTable(filepath='~/Downloads/NEON_dissolved-gases-surfacewater.zip');
+#neonUtilities.stackByTable(filepath='~/Downloads/NEON_dissolved-gases-surfacewater.zip');
 #Read downloaded and stacked files into Python
 ##os.listdir('Downloads/filesToStack10003/stackedFiles/')
 # -----------------------------------------------------------------------------------------------#
+# data_dir = '/NEON_dissolved-gases-surfacewater.zip' #default
+def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip'):
 
-def format_sdg():
-    # Defines data directory
-    data_dir = os.chdir('/Users/marcelarodriguez/eclipse-workspace2/NEON Dissolved Gas/NEON/DissolvedGas')
-    print(os.getcwd()) # testing code
-    
     ##### Default values #####
     volH2O = 40 #mL
     volGas = 20 #mL
-    print (volH2O + volGas) # testing code
-    
+
     #Check if the data is loaded already using loadByProduct
-    if not 'externalLabData' and 'fieldDataProc' and 'fieldSuperParent' in locals() == False:
-        print("data is not loaded") # testing code
-        
-        #If not, stack field and external lab data
-        if not os.path.isdir(re.sub("\\.zip", "", data_dir)):
-            stackByTable(dpID = "DP1.20097.001", filepath = data_dir)
-        
-        externalLabData = pd.read_csv(re.sub("\\.zip","",data_dir), "stackedFiles", "sdg_externalLabData.csv", sep = "/")
-        fieldDataProc = pd.read_csv(re.sub("\\.zip","",data_dir), "stackedFiles", "sdg_fieldDataProc.csv", sep = "/")
-        fieldSuperParent = pd.read_csv(re.sub("\\.zip","",data_dir), "stackedFiles", "sdg_fieldSuperParent.csv", sep = "/")
+    if 'externalLabData' and 'fieldDataProc' and 'fieldSuperParent' in locals() is False:
+        print("data is not loaded")  # testing code
+
+        # If not, stack field and external lab data
+        if os.path.isdir(re.sub("\\.zip", "", data_dir)) is False:
+            neonUtilities.stackByTable(dpID="DP1.20097.001", filepath=data_dir)
+
+        externalLabData = pd.read_csv(re.sub("\\.zip", "", data_dir), "stackedFiles", "sdg_externalLabData.csv", sep="/")
+        fieldDataProc = pd.read_csv(re.sub("\\.zip", "", data_dir), "stackedFiles", "sdg_fieldDataProc.csv", sep="/")
+        fieldSuperParent = pd.read_csv(re.sub("\\.zip", "", data_dir), "stackedFiles", "sdg_fieldSuperParent.csv",
+                                       sep="/")
 
         df_externalLabData = pd.DataFrame(externalLabData)
         df_fieldDataProc = pd.DataFrame(fieldDataProc)
@@ -59,7 +61,7 @@ def format_sdg():
     else:
         df_fieldDataProc['volGasSource'] == 0
 
-    if df_fieldDataProc['waterVolumeSyringe'][pd.isna(fieldDataProc['waterVolumeSyringe'])]:
+    df_fieldDataProc['waterVolumeSyringe'][pd.isna(fieldDataProc['waterVolumeSyringe'])] = volH2O
         df_fieldDataProc['waterVolumeSyringe'][fieldDataProc['waterVolumeSyringe']] = volH2O
 
     if df_fieldDataProc['gasVolumeSyringe'][pd.isna(fieldDataProc['gasVolumeSyringe'])]:
@@ -113,7 +115,6 @@ def format_sdg():
     for l in 1,len(outputDF['waterSampleID']):
         try:
           outputDF['concentrationCO2Air'][l] = externalLabData['concentrationCO2'][externalLabData['sampleID'] == outputDF['referenceAirSampleID'][l]]
-        except NameError:
           outputDF['concentrationCO2Gas'][l] = externalLabData['concentrationCO2'][externalLabData['sampleID'] == outputDF['equilibratedAirSampleID'][l]]
 
         try:
@@ -139,5 +140,4 @@ def format_sdg():
     
     #Flag values below detection (TBD)
     
-    return(outputDF)
-
+     # return(outputDF)
