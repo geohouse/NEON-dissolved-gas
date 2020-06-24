@@ -80,14 +80,12 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
 
     outputDF = pd.DataFrame(fieldDataProc['waterSampleID'], columns=outputDFNames)
     print(outputDF)
-    #outputDF.columns = outputDFNames
-    
-    
+    print(outputDFNames)
     #Populate the output file with field data
-
-#    for k in 1,len(outputDF.columns):
-#        if outputDF.columns[k] in fieldDataProc.columns:
-#          outputDF[k] = fieldDataProc[fieldDataProc.columns == outputDF.columns[k]]
+    for k in range(len(outputDFNames)):
+        if outputDFNames[k] in fieldDataProc:
+            print("found it: " + output[k])
+            #outputDF[k] = fieldDataProc[fieldDataProc == outputDF[k]]
 
 #        outputDF['headspaceTemp'] = fieldDataProc['storageWaterTemp']
 #        outputDF['barometricPressure'] = fieldDataProc['ptBarometricPressure']
