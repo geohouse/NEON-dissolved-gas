@@ -78,9 +78,9 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
         'volGasSource'
     ]
 
-
- #   outputDF = pd.DataFrame(matrix(data=pd.np.nan, ncol=len(outputDFNames), nrow=len(fieldDataProc['waterSampleID'])))
-#  outputDF.columns = outputDFNames
+    outputDF = pd.DataFrame(fieldDataProc['waterSampleID'], columns=outputDFNames)
+    print(outputDF)
+    #outputDF.columns = outputDFNames
     
     
     #Populate the output file with field data
@@ -136,7 +136,7 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
     print(fieldDataProc)
     print(fieldSuperParent)
 
-    return externalLabData, fieldDataProc, fieldSuperParent
+    return externalLabData, fieldDataProc, fieldSuperParent, outputDF
 
 
-external_Lab_Data, field_Data_Proc, field_Super_Parent = def_format_sdg()
+external_Lab_Data, field_Data_Proc, field_Super_Parent, output_DF = def_format_sdg()
