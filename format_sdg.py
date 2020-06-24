@@ -81,21 +81,20 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
     outputDF = pd.DataFrame(fieldDataProc['waterSampleID'], columns=outputDFNames)
     print(outputDF)
     print(outputDFNames)
-    #Populate the output file with field data
-    for k in range(len(outputDFNames)):
-        if outputDFNames[k] in fieldDataProc:
-            print("found it: " + output[k])
-            #outputDF[k] = fieldDataProc[fieldDataProc == outputDF[k]]
 
-#        outputDF['headspaceTemp'] = fieldDataProc['storageWaterTemp']
-#        outputDF['barometricPressure'] = fieldDataProc['ptBarometricPressure']
-#        outputDF['waterVolume'] = fieldDataProc['waterVolumeSyringe']
-#        outputDF['gasVolume'] = fieldDataProc['gasVolumeSyringe']
-#        outputDF['stationID'] = fieldDataProc['namedLocation']
+    #Populate the output file with field data
+    #for k in range(len(outputDF)):
+    #    if outputDF[k] in fieldDataProc:
+    #        outputDF[k] = (fieldDataProc[fieldDataProc == outputDF[k]])
+    #    outputDF['headspaceTemp'] = fieldDataProc['storageWaterTemp']
+    #    outputDF['barometricPressure'] = fieldDataProc['ptBarometricPressure']
+    #    outputDF['waterVolume'] = fieldDataProc['waterVolumeSyringe']
+    #    outputDF['gasVolume'] = fieldDataProc['gasVolumeSyringe']
+    #    outputDF['stationID'] = fieldDataProc['namedLocation']
 
 
     #Populate the output file with external lab data
-#    for l in 1,len(outputDF['waterSampleID']):
+#    for l in range(len(outputDF['waterSampleID'])):
 #        try:
 #          outputDF['concentrationCO2Air'][l] = externalLabData['concentrationCO2'][externalLabData['sampleID'] == outputDF['referenceAirSampleID'][l]]
 #          outputDF['concentrationCO2Gas'][l] = externalLabData['concentrationCO2'][externalLabData['sampleID'] == outputDF['equilibratedAirSampleID'][l]]
@@ -115,11 +114,11 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
 #            pass
     
     #Populate the output file with water temperature data for streams
-#    for m in 1,len(outputDF['waterSampleID']):
+#    for m in range(len(outputDF['waterSampleID'])):
 #        try:
 #            outputDF['waterTemp'][m] = fieldSuperParent['waterTemp'][fieldSuperParent['parentSampleID'] == outputDF['waterSampleID'][m]]
 #        except NameError:
-#            if pd.isna(outputDF['headspaceTemp'][m]):
+#           if outputDF['headspaceTemp'][m].isna() is True:
 #                try:
 #                    outputDF['headspaceTemp'][m] = fieldSuperParent['waterTemp'][fieldSuperParent['parentSampleID'] == outputDF['waterSampleID'][m]]
 #                except NameError:
@@ -127,7 +126,6 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
     
     #Flag values below detection (TBD)
     
-#    return outputDF
 
     print(externalLabData)
     print(externalLabData.columns)
