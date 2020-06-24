@@ -7,15 +7,15 @@ import rpy2
 import rpy2.robjects as robjects
 from rpy2.robjects.packages import importr
 
-utils = importr('utils')
+#utils = importr('utils')
 
-utils.install_packages('neonUtilities', repos='https://cran.rstudio.com/')
+#utils.install_packages('neonUtilities', repos='https://cran.rstudio.com/')
 neonUtilities = importr('neonUtilities')
 
 # -----------------------------------------------------------------------------------------------#
 
 
-def def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip'):
+def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip'):
 
     ##### Default values ####
     volH2O = 40 #mL
@@ -77,13 +77,10 @@ def def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater.zi
         'volH2OSource',
         'volGasSource'
     ]
-    print(externalLabData)
-    print(externalLabData.columns)
-    print(fieldDataProc)
-    print(fieldSuperParent)
 
-    outputDF = pd.DataFrame(matrix(data=pd.np.nan, ncol=len(outputDFNames), nrow=len(fieldDataProc['waterSampleID'])))
-    outputDF.columns = outputDFNames
+
+ #   outputDF = pd.DataFrame(matrix(data=pd.np.nan, ncol=len(outputDFNames), nrow=len(fieldDataProc['waterSampleID'])))
+#  outputDF.columns = outputDFNames
     
     
     #Populate the output file with field data
@@ -134,4 +131,12 @@ def def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater.zi
     
 #    return outputDF
 
-def_format_sdg()
+    print(externalLabData)
+    print(externalLabData.columns)
+    print(fieldDataProc)
+    print(fieldSuperParent)
+
+    return externalLabData, fieldDataProc, fieldSuperParent
+
+
+external_Lab_Data, field_Data_Proc, field_Super_Parent = def_format_sdg()
