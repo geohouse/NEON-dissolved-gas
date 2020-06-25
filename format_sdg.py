@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import os.path
 import re
+import numpy as np
 
 import rpy2
 import rpy2.robjects as robjects
@@ -78,14 +79,17 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
         'volGasSource'
     ]
 
-    outputDF = pd.DataFrame(fieldDataProc['waterSampleID'], columns=outputDFNames)
+    # Assign the number of rows and columns to the new DataFrame, outputDF
+    # The number of rows = # of rows there is in fieldDataProc['waterSampleID'] & the number of columns = # of items in the list, outputDFNames
+    outputDF = pd.DataFrame(index=np.arange(len(fieldDataProc['waterSampleID'])), columns=np.arange(len(outputDFNames)))
+    # Assigns the items inside outputDFNames to the columns in the outputDF DataFrame
+    outputDF.columns = outputDFNames
     print(outputDF)
-    print(outputDFNames)
 
     #Populate the output file with field data
     #for k in range(len(outputDF)):
-    #    if outputDF[k] in fieldDataProc:
-    #        outputDF[k] = (fieldDataProc[fieldDataProc == outputDF[k]])
+     #   if outputDF[k] in fieldDataProc:
+     #       outputDF[k] = (fieldDataProc[fieldDataProc == outputDF[k]])
     #    outputDF['headspaceTemp'] = fieldDataProc['storageWaterTemp']
     #    outputDF['barometricPressure'] = fieldDataProc['ptBarometricPressure']
     #    outputDF['waterVolume'] = fieldDataProc['waterVolumeSyringe']
