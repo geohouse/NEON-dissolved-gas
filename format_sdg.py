@@ -84,17 +84,13 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
     outputDF = pd.DataFrame(index=np.arange(len(fieldDataProc['waterSampleID'])), columns=np.arange(len(outputDFNames)))
     # Assigns the items inside outputDFNames to the columns in the outputDF DataFrame
     outputDF.columns = outputDFNames
-    print(outputDF)
 
     #Populate the output file with field data
-    #for k in range(len(outputDF)):
-     #   if outputDF[k] in fieldDataProc:
-     #       outputDF[k] = (fieldDataProc[fieldDataProc == outputDF[k]])
-    #    outputDF['headspaceTemp'] = fieldDataProc['storageWaterTemp']
-    #    outputDF['barometricPressure'] = fieldDataProc['ptBarometricPressure']
-    #    outputDF['waterVolume'] = fieldDataProc['waterVolumeSyringe']
-    #    outputDF['gasVolume'] = fieldDataProc['gasVolumeSyringe']
-    #    outputDF['stationID'] = fieldDataProc['namedLocation']
+    outputDF['headspaceTemp'] = fieldDataProc['storageWaterTemp']
+    outputDF['barometricPressure'] = fieldDataProc['ptBarometricPressure']
+    outputDF['waterVolume'] = fieldDataProc['waterVolumeSyringe']
+    outputDF['gasVolume'] = fieldDataProc['gasVolumeSyringe']
+    outputDF['stationID'] = fieldDataProc['namedLocation']
 
 
     #Populate the output file with external lab data
@@ -129,11 +125,14 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
 #                    pass
     
     #Flag values below detection (TBD)
-    
-
+    print("**********************************************************************")
+    print("EXTERNAL LAB DATA")
     print(externalLabData)
-    print(externalLabData.columns)
+    print("**********************************************************************")
+    print("FIELD DATA PROC")
     print(fieldDataProc)
+    print("**********************************************************************")
+    print("FIELD SUPER PARENT")
     print(fieldSuperParent)
 
     return externalLabData, fieldDataProc, fieldSuperParent, outputDF
