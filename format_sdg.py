@@ -85,44 +85,83 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
     # Assigns the items inside outputDFNames to the columns in the outputDF DataFrame
     outputDF.columns = outputDFNames
 
-    #Populate the output file with field data
+    # Populate the output file with field data
+    for k in range(len(outputDF.columns)):
+    #for ind, row in fieldDataProc.iterrows():
+        if outputDF.columns[k] in fieldDataProc.columns:
+            print("Found: " + outputDF.columns[k])
+
+            outputDF.iloc[:,k] = fieldDataProc.loc[:,fieldDataProc.columns == outputDF.columns[k]]
+             # outputDF.values[k, :] = 0
+            #fieldDataProc.values[fieldDataProc.columns == outputDF.columns[k]]
+            #outputDF.columns[k] = fieldDataProc[fieldDataProc.columns == outputDF.columns[k]]
+            #print(outputDF.columns[k])
+            # shared_columns_fdp = fieldDataProc.columns[k]
+          #  values_fdp = fieldDataProc.values
+          #  print(shared_columns_fdp)
+          #  print(values_fdp)
+
+                #shared_columns_odf = outputDF.columns[k]
+                #values_odf = outputDF.values
+
+            #outputDF.values[k] = fieldDataProc.values[fieldDataProc.columns[k] == outputDF.columns[k]]
+         #   print(fieldDataProc.columns)
+            # print(fieldDataProc.values[k])
+            # print(len(outputDF))
+            #print(fieldDataProc.columns[k])
+            #print(fieldDataProc.values[k])
+
+
+            #fieldDataProc.loc[outputDF.columns[k]]
+            #print(fieldDataProc.values[fieldDataProc.columns == outputDF.columns[k]])
+            #outputDF[k] = fieldDataProc[fieldDataProc.columns == outputDF.columns[k]]
+
+
+
+
     outputDF['headspaceTemp'] = fieldDataProc['storageWaterTemp']
     outputDF['barometricPressure'] = fieldDataProc['ptBarometricPressure']
     outputDF['waterVolume'] = fieldDataProc['waterVolumeSyringe']
     outputDF['gasVolume'] = fieldDataProc['gasVolumeSyringe']
     outputDF['stationID'] = fieldDataProc['namedLocation']
 
+    #outputDF = np.array(outputDF)
+    #externalLabData = np.array(outputDF)
 
     #Populate the output file with external lab data
-#    for l in range(len(outputDF['waterSampleID'])):
-#        try:
-#          outputDF['concentrationCO2Air'][l] = externalLabData['concentrationCO2'][externalLabData['sampleID'] == outputDF['referenceAirSampleID'][l]]
-#          outputDF['concentrationCO2Gas'][l] = externalLabData['concentrationCO2'][externalLabData['sampleID'] == outputDF['equilibratedAirSampleID'][l]]
-#        except NameError:
-#            pass
+    for x in range(len(outputDF['waterSampleID'])):
+        try:
+           # working code
+            #outputDF.loc[outputDF.index[[x]], 'concentrationCO2Air'] = externalLabData.loc[:, 'concentrationCO2']
+            #fieldDataProc.loc[:, fieldDataProc.columns == outputDF.columns[k]]
+            outputDF.loc[outputDF.index[[x]], 'concentrationCO2Air'] = externalLabData.loc[[externalLabData['sampleID'] == outputDF.loc[outputDF.index[[x]], 'referenceAirSampleID']], 'concentrationCO2']
+            #outputDF['concentrationCO2Gas'].loc[:,(x)] = 0
+            #outputDF['concentrationCO2Air'][x] = externalLabData[:, 'concentrationCO2'][externalLabData['sampleID'] == outputDF['referenceAirSampleID'][x]]
+           #outputDF['concentrationCO2Gas'][x] = externalLabData[:, 'concentrationCO2'][externalLabData['sampleID'] == outputDF['equilibratedAirSampleID'][x]]
+        except NameError:
+            pass
+  #      try:
+  #          outputDF['concentrationCH4Air'][x] = externalLabData['concentrationCH4'][externalLabData['sampleID'] == outputDF['referenceAirSampleID'][x]]
+  #          outputDF['concentrationCH4Gas'][x] = externalLabData['concentrationCH4'][externalLabData['sampleID'] == outputDF['equilibratedAirSampleID'][x]]
+  #      except NameError:
+  #          pass
 
-#        try:
-#          outputDF['concentrationCH4Air'][l] = externalLabData['concentrationCH4'][externalLabData['sampleID'] == outputDF['referenceAirSampleID'][l]]
-#          outputDF['concentrationCH4Gas'][l] = externalLabData['concentrationCH4'][externalLabData['sampleID'] == outputDF['equilibratedAirSampleID'][l]]
-#        except NameError:
-#            pass
+   #     try:
+   #         outputDF['concentrationN2OAir'][x] = externalLabData['concentrationN2O'][externalLabData['sampleID'] == outputDF['referenceAirSampleID'][x]]
+   #         outputDF['concentrationN2OGas'][x] = externalLabData['concentrationN2O'][externalLabData['sampleID'] == outputDF['equilibratedAirSampleID'][x]]
+   #     except NameError:
+    #        pass
 
-#        try:
-#          outputDF['concentrationN2OAir'][l] = externalLabData['concentrationN2O'][externalLabData['sampleID'] == outputDF['referenceAirSampleID'][l]]
-#          outputDF['concentrationN2OGas'][l] = externalLabData['concentrationN2O'][externalLabData['sampleID'] == outputDF['equilibratedAirSampleID'][l]]
-#        except NameError:
-#            pass
-    
     #Populate the output file with water temperature data for streams
-#    for m in range(len(outputDF['waterSampleID'])):
-#        try:
-#            outputDF['waterTemp'][m] = fieldSuperParent['waterTemp'][fieldSuperParent['parentSampleID'] == outputDF['waterSampleID'][m]]
-#        except NameError:
-#           if outputDF['headspaceTemp'][m].isna() is True:
-#                try:
-#                    outputDF['headspaceTemp'][m] = fieldSuperParent['waterTemp'][fieldSuperParent['parentSampleID'] == outputDF['waterSampleID'][m]]
-#                except NameError:
-#                    pass
+    #for m in range(len(outputDF['waterSampleID'])):
+     #   try:
+    #        outputDF['waterTemp'][m] = fieldSuperParent['waterTemp'][fieldSuperParent['parentSampleID'] == outputDF['waterSampleID'][m]]
+     #   except NameError:
+     #       if outputDF['headspaceTemp'][m].isna() is True:
+      #          try:
+       #             outputDF['headspaceTemp'][m] = fieldSuperParent['waterTemp'][fieldSuperParent['parentSampleID'] == outputDF['waterSampleID'][m]]
+       #         except NameError:
+       #             pass
     
     #Flag values below detection (TBD)
     print("**********************************************************************")
