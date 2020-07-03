@@ -1,3 +1,5 @@
+from testing import outputDF, externalLabData
+
 for x in range(len(outputDF['waterSampleID'])):
     # print(x)
     # FOR DEMO
@@ -29,3 +31,4 @@ for x in range(len(outputDF['waterSampleID'])):
 
     except Exception:
         pass
+
