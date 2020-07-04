@@ -112,7 +112,7 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
             pass
         try:
             outputDF.loc[outputDF.index[[l]], 'concentrationCH4Air'] = externalLabData.loc[externalLabData.loc[:, 'sampleID'] == outputDF.loc[outputDF.index[[l]], 'referenceAirSampleID'].item(), 'concentrationCH4'].item()
-            outputDF.loc[outputDF.index[[x]], 'concentrationCH4Gas'] = externalLabData.loc[ externalLabData.loc[:, 'sampleID'] == outputDF.loc[outputDF.index[[l]], 'equilibratedAirSampleID'].item(), 'concentrationCH4'].item()
+            outputDF.loc[outputDF.index[[l]], 'concentrationCH4Gas'] = externalLabData.loc[ externalLabData.loc[:, 'sampleID'] == outputDF.loc[outputDF.index[[l]], 'equilibratedAirSampleID'].item(), 'concentrationCH4'].item()
 
         except Exception:
             pass
