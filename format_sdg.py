@@ -1,16 +1,44 @@
+##############################################################################################
+#' @title Dissolved Gas Data Formatting
+#' @export
+
+#' @author
+#' Marcela Rodriguez \email{rodriguezm@battelleecology.org} \cr
+
+#' @description This function reads in data from the NEON Dissolved Gas data product to calculate dissolved gas concentrations in surface water. For the best results download the expanded dissolved gas package. No need to unzip the downloaded files, just place them all in the sae directory.
+#' @importFrom neonUtilities stackByTable
+#' @importFrom utils read.csv
+
+#' @param dataDir User identifies the directory that contains the zipped data
+
+#' @return This function returns one data frame formatted for use with def.calc.sdg.R to actually calculate the concentration of the gases in the surface water sample
+
+#' @references
+#' License: GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007
+
+#' @keywords dissolved gases, methane, CH4, carbon dioxide, CO2, nitrous oxide, N2O, surface water, aquatic, streams, lakes, rivers
+
+#' @examples
+#' #where the data .zip file is in the working directory and has the default name,
+#' #sdgFormatted = def_format_sdg()
+#' #where the data.zip file is in the downloads folder and has default name,
+#' #sdgFormatted =
+#' #def_format_sdg(dataDir = path.expand("~/Downloads/NEON_dissolved-gases-surfacewater.zip"))
+#' #where the data.zip file is in the downloads folder and has a specified name,
+#' #sdgFormatted = def_format_sdg(dataDir = path.expand("~/Downloads/non-standard-name.zip"))
+#' #Using the example data in this package
+#' #dataDirectory = re.sub("\\.zip", "", data_dir) + "/stackedFiles" + "/extdata")
+#' #sdgFormatted = def_format_sdg(dataDir = dataDirectory)
+
+#' @seealso def_calc_sdg_conc.py and def_calc_sdg_sat.py for calculating dissolved gas
+#' concentrations and percent saturation, respectively
+
 import pandas as pd
 import os
 import os.path
 import re
 import numpy as np
-
-import rpy2
-import rpy2.robjects as robjects
 from rpy2.robjects.packages import importr
-
-#utils = importr('utils')
-
-#utils.install_packages('neonUtilities', repos='https://cran.rstudio.com/')
 neonUtilities = importr('neonUtilities')
 
 # -----------------------------------------------------------------------------------------------#
@@ -24,7 +52,7 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
 
     #Check if the data is loaded already using loadByProduct
     if 'externalLabData' and 'fieldDataProc' and 'fieldSuperParent' not in locals() or globals():
-        print("data is not loaded")  # testing code
+        #  print("data is not loaded")  # testing code
 
         # If data is not loaded, stack field and external lab data
         if os.path.isdir(re.sub("\\.zip", "", data_dir)):
@@ -34,10 +62,7 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
         fieldDataProc = pd.read_csv(re.sub("\\.zip", "", data_dir) + "/stackedFiles" + "/sdg_fieldDataProc.csv")
         fieldSuperParent = pd.read_csv(re.sub("\\.zip", "", data_dir) + "/stackedFiles" + "/sdg_fieldSuperParent.csv")
 
-
-    print("Data is loaded") #testing code
     #Flag and set default field values
-
     if fieldDataProc['waterVolumeSyringe'].isna() is True:
         fieldDataProc['volH2OSource'] = 1
     else:
@@ -79,18 +104,12 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
         'volGasSource'
     ]
 
-    # Assign the number of rows and columns to the new DataFrame, outputDF
-    # The number of rows = # of rows there is in fieldDataProc['waterSampleID'] & the number of columns = # of items in the list, outputDFNames
     outputDF = pd.DataFrame(index=np.arange(len(fieldDataProc['waterSampleID'])), columns=np.arange(len(outputDFNames)))
-    # Assigns the items inside outputDFNames to the columns in the outputDF DataFrame
     outputDF.columns = outputDFNames
 
     # Populate the output file with field data
     for k in range(len(outputDF.columns)):
-    #for ind, row in fieldDataProc.iterrows():
         if outputDF.columns[k] in fieldDataProc.columns:
-            print("Found: " + outputDF.columns[k])
-
             outputDF.iloc[:,k] = fieldDataProc.loc[:,fieldDataProc.columns == outputDF.columns[k]]
 
     outputDF['headspaceTemp'] = fieldDataProc['storageWaterTemp']
@@ -98,9 +117,6 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
     outputDF['waterVolume'] = fieldDataProc['waterVolumeSyringe']
     outputDF['gasVolume'] = fieldDataProc['gasVolumeSyringe']
     outputDF['stationID'] = fieldDataProc['namedLocation']
-
-    #outputDF = np.array(outputDF)
-    #externalLabData = np.array(outputDF)
 
     #Populate the output file with external lab data
     for l in range(len(outputDF['waterSampleID'])):
@@ -134,19 +150,10 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
                 outputDF.loc[outputDF.index[[m]], 'headspaceTemp'] = fieldSuperParent.loc[fieldSuperParent.loc[:, 'parentSampleID'] == outputDF.loc[outputDF.index[[m]], 'waterSampleID'].item(), 'waterTemp'].item()
             except Exception:
                 pass
-    
-    #Flag values below detection (TBD)
-    print("**********************************************************************")
-    print("EXTERNAL LAB DATA")
-    print(externalLabData)
-    print("**********************************************************************")
-    print("FIELD DATA PROC")
-    print(fieldDataProc)
-    print("**********************************************************************")
-    print("FIELD SUPER PARENT")
-    print(fieldSuperParent)
 
-    return externalLabData, fieldDataProc, fieldSuperParent, outputDF
+    # Flag values below detection (TBD)
+
+    return outputDF
 
 
-external_Lab_Data, field_Data_Proc, field_Super_Parent, output_DF = def_format_sdg()
+outputDF = def_format_sdg()
