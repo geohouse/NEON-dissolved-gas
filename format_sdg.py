@@ -38,8 +38,16 @@ import os
 import os.path
 import re
 import numpy as np
+
+import rpy2
+import rpy2.robjects as robjects
 from rpy2.robjects.packages import importr
+
+utils = importr('utils')
+
+utils.install_packages('neonUtilities', repos='https://cran.rstudio.com/')
 neonUtilities = importr('neonUtilities')
+
 
 # -----------------------------------------------------------------------------------------------#
 
@@ -152,7 +160,6 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
                 pass
 
     # Flag values below detection (TBD)
-
     return outputDF
 
 

@@ -1,6 +1,11 @@
 import pandas as pd
 
-def calc_sdg_conc (
+#import format_sdg
+from numpy.ma import exp
+from rpy2.rinterface import NA
+
+
+def calc_sdg_concentration(
     inputFile,
     volGas="gasVolume",
     volH2O="waterVolume",
@@ -14,9 +19,7 @@ def calc_sdg_conc (
     eqN2O="concentrationN2OGas",
     sourceN2O="concentrationN2OAir"
 ):
-
-    if type(inputFile) is "character":
-
+    if type(inputFile) is str:
         inputFile = pd.read.csv(inputFile)
 
     ##### Constants #####
@@ -34,39 +37,34 @@ def calc_sdg_conc (
     cdHdTN2O = 2700  # K, range: 2600 - 3600
 
     ##### Populate mean global values for reference air where it isn't reported #####
-    inputFile[, sourceCO2] = ifelse( is.na(inputFile[, sourceCO2]),  # if reported as NA
-    405,  # use global mean https://www.esrl.noaa.gov/gmd/ccgg/trends/global.html
-    inputFile[, sourceCO2])
+    if inputFile.iloc[:, sourceCO2].isna() is True:
+        inputFile.iloc[:, sourceCO2] = 405  # use global mean https://www.esrl.noaa.gov/gmd/ccgg/trends/global.html
 
-    inputFile[, sourceCH4] = ifelse( is.na(inputFile[, sourceCH4]),  # use global average if not measured
-    1.85,  # https://www.esrl.noaa.gov/gmd/ccgg/trends_ch4/
-    inputFile[, sourceCH4])
+    if inputFile.iloc[:, sourceCH4].isna() is True:
+        inputFile.iloc[:, sourceCH4] = 1.85  # https://www.esrl.noaa.gov/gmd/ccgg/trends_ch4/
 
-    inputFile[, sourceN2O] = ifelse( is.na(inputFile[, sourceN2O]),  # use global average if not measured
-    0.330,  # https://www.esrl.noaa.gov/gmd/hats/combined/N2O.html
-    inputFile[, sourceN2O])
+    if inputFile.iloc[:, sourceN2O].isna() is True:
+        inputFile.iloc[:, sourceN2O] = 0.330  # https://www.esrl.noaa.gov/gmd/hats/combined/N2O.html
 
     ##### Calculate dissolved gas concentration in original water sample #####
     inputFile['dissolvedCO2'] = NA
-    inputFile['dissolvedCO2'] < - inputFile[, baro] *cPresConv *
-                                                  (inputFile[, volGas] * (inputFile[, eqCO2] - inputFile[, sourceCO2]) / (
-                                                  cGas * (inputFile[, headspaceTemp] + cKelvin) * inputFile[, volH2O]) +
-                                                  ckHCO2 * exp(
-        cdHdTCO2 * (1 / (inputFile[, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile[, eqCO2])
+    inputFile['dissolvedCO2'] = inputFile.iloc[:, baro] * cPresConv * (inputFile.iloc[:, volGas] * (inputFile.iloc[:, eqCO2] - inputFile.iloc[:, sourceCO2]) / (
+                                                cGas * (inputFile.iloc[:, headspaceTemp] + cKelvin) * inputFile.iloc[:, volH2O]) + ckHCO2 * exp(cdHdTCO2 *
+                                                (1 / (inputFile.iloc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.iloc[:, eqCO2])
 
-    inputFile['dissolvedCH4'] = NA
-    inputFile['dissolvedCH4'] = inputFile[, baro] *cPresConv *
-                                                  (inputFile[, volGas] * (inputFile[, eqCH4] - inputFile[, sourceCH4]) / (
-                                                  cGas * (inputFile[, headspaceTemp] + cKelvin) * inputFile[, volH2O]) +
-                                                  ckHCH4 * exp(
-        cdHdTCH4 * (1 / (inputFile[, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile[, eqCH4])
+#    inputFile['dissolvedCH4'] = NA
+#    inputFile['dissolvedCH4'] = inputFile[, baro] *cPresConv *
+ #                                                 (inputFile[, volGas] * (inputFile[, eqCH4] - inputFile[, sourceCH4]) / (
+#                                                  cGas * (inputFile[, headspaceTemp] + cKelvin) * inputFile[, volH2O]) +
+#                                                  ckHCH4 * exp(
+#        cdHdTCH4 * (1 / (inputFile[, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile[, eqCH4])
 
-    inputFile['dissolvedN2O'] = NA
-    inputFile['dissolvedN2O'] = inputFile[, baro] *cPresConv *
-                                                  (inputFile[, volGas] * (inputFile[, eqN2O] - inputFile[, sourceN2O]) / (
-                                                  cGas * (inputFile[, headspaceTemp] + cKelvin) * inputFile[, volH2O]) +
-                                                  ckHN2O * exp(
-        cdHdTN2O * (1 / (inputFile[, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile[, eqN2O])
+#    inputFile['dissolvedN2O'] = NA
+#    inputFile['dissolvedN2O'] = inputFile[, baro] *cPresConv *
+ #                                                 (inputFile[, volGas] * (inputFile[, eqN2O] - inputFile[, sourceN2O]) / (
+#                                                  cGas * (inputFile[, headspaceTemp] + cKelvin) * inputFile[, volH2O]) +
+#                                                  ckHN2O * exp(
+#        cdHdTN2O * (1 / (inputFile[, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile[, eqN2O])
 
     ##### Step-by-step Calculation of dissolved gas concentrations for testing #####
 
@@ -116,11 +114,11 @@ def calc_sdg_conc (
     # inputFile$dissolvedN2O <- N2Owat/(volH2O/1000)
 
     # Round to significant figures
-    inputFile$dissolvedCO2 < - signif(inputFile$dissolvedCO2, digits = 3)
-    inputFile$dissolvedCH4 < - signif(inputFile$dissolvedCH4, digits = 3)
-    inputFile$dissolvedN2O < - signif(inputFile$dissolvedN2O, digits = 3)
+ #   inputFile$dissolvedCO2 < - signif(inputFile$dissolvedCO2, digits = 3)
+ #   inputFile$dissolvedCH4 < - signif(inputFile$dissolvedCH4, digits = 3)
+#    inputFile$dissolvedN2O < - signif(inputFile$dissolvedN2O, digits = 3)
 
-    return (inputFile)
+    return inputFile
 
-    }
 
+#inputFile = calc_sdg_concentration()
