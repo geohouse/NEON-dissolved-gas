@@ -66,4 +66,4 @@ def def_calc_sdg_sat(
 
     return inputFile
 
-inputFile = def_calc_sdg_sat()
+#inputFile = def_calc_sdg_sat()

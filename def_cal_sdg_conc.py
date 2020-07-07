@@ -1,10 +1,14 @@
+import os
+
 import pandas as pd
 import math
 #import format_sdg
+from numpy import nan
 from numpy.ma import exp
 from rpy2.rinterface import NA
 
-#from def_format_sdg import def_format_sdg
+from def_format_sdg import def_format_sdg
+import def_format_sdg as deffg
 
 
 def sign_if(x, digits = 3):
@@ -12,6 +16,11 @@ def sign_if(x, digits = 3):
         return x
     digits -= math.ceil(math.log10(abs(x)))
     return round(x, digits)
+
+
+sdgFormatted = deffg.def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip')
+inputFile = sdgFormatted
+
 
 def def_calc_sdg_concentration(
     inputFile,
@@ -45,31 +54,33 @@ def def_calc_sdg_concentration(
     cdHdTN2O = 2700  # K, range: 2600 - 3600
 
     ##### Populate mean global values for reference air where it isn't reported #####
-    if inputFile.iloc[:, sourceCO2].isna() is True:
-        inputFile.iloc[:, sourceCO2] = 405  # use global mean https://www.esrl.noaa.gov/gmd/ccgg/trends/global.html
+    if inputFile.iloc[:, 'sourceCO2'].isna():
+        inputFile.iloc[:, 'sourceCO2'] = 405  # use global mean https://www.esrl.noaa.gov/gmd/ccgg/trends/global.html
+    else:
+        inputFile.iloc[:, sourceCO2] = inputFile.iloc[:, sourceCO2]
+    #if inputFile.iloc[sourceCH4].isna() is True:
+    #    inputFile.iloc[sourceCH4] = 1.85  # https://www.esrl.noaa.gov/gmd/ccgg/trends_ch4/
 
-    if inputFile.iloc[:, sourceCH4].isna() is True:
-        inputFile.iloc[:, sourceCH4] = 1.85  # https://www.esrl.noaa.gov/gmd/ccgg/trends_ch4/
-
-    if inputFile.iloc[:, sourceN2O].isna() is True:
-        inputFile.iloc[:, sourceN2O] = 0.330  # https://www.esrl.noaa.gov/gmd/hats/combined/N2O.html
+   # if inputFile.iloc[:, 'sourceN2O'].isna() is True:
+    #    inputFile.iloc[:, 'sourceN2O'] = 0.330  # https://www.esrl.noaa.gov/gmd/hats/combined/N2O.html
 
     ##### Calculate dissolved gas concentration in original water sample #####
-    inputFile['dissolvedCO2'] = NA
+    inputFile['dissolvedCO2'] = nan
     inputFile['dissolvedCO2'] = inputFile.iloc[:, baro] * cPresConv * (inputFile.iloc[:, volGas] * (inputFile.iloc[:, eqCO2] - inputFile.iloc[:, sourceCO2]) / (
                                                 cGas * (inputFile.iloc[:, headspaceTemp] + cKelvin)* inputFile.iloc[:, volH2O]) + ckHCO2 * exp(cdHdTCO2 *
                                                 (1 / (inputFile.iloc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.iloc[:, eqCO2])
 
-    inputFile['dissolvedCH4'] = NA
+    inputFile['dissolvedCH4'] = nan
     inputFile['dissolvedCH4'] = inputFile.iloc[:, baro] * cPresConv *(inputFile.iloc[:, volGas] * (inputFile.iloc[:, eqCH4] - inputFile.iloc[:, sourceCH4]) / (
                                                   cGas * (inputFile.iloc[:, headspaceTemp] + cKelvin) * inputFile.iloc[:, volH2O]) +
                                                   ckHCH4 * exp(cdHdTCH4 * (1 / (inputFile.iloc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.iloc[:, eqCH4])
 
-    inputFile['dissolvedN2O'] = NA
+    inputFile['dissolvedN2O'] = nan
     inputFile['dissolvedN2O'] = inputFile.iloc[:, baro] * cPresConv * (inputFile.iloc[:, volGas] * (inputFile.iloc[:, eqN2O] - inputFile.iloc[:, sourceN2O]) / (
                                                   cGas * (inputFile.iloc[:, headspaceTemp] + cKelvin) * inputFile.iloc[:, volH2O]) +
                                                   ckHN2O * exp(cdHdTN2O * (1 / (inputFile.iloc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.iloc[:, eqN2O])
 
+    print(sdgFormatted)
     ##### Step-by-step Calculation of dissolved gas concentrations for testing #####
 
     # Dissolved gas concentration in the original water samples (dissolvedGas) is
@@ -126,7 +137,10 @@ def def_calc_sdg_concentration(
     return inputFile
 
 
-#sdgFormatted = def_format_sdg(data_dir= data_dir)
-#sdgDataPlusConc = def_calc_sdg_conc(inputFile=sdgFormatted)
+#sdgFormatted = deffg.def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip')
+#sdgDataPlusConce = def_calc_sdg_concentration(sdgFormatted)
+
+#inputFile = sdgFormatted
+#inputFile = def_calc_sdg_concentration(sdgDataPlusConc)
 
 
