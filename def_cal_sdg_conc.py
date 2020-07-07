@@ -1,11 +1,19 @@
 import pandas as pd
-
+import math
 #import format_sdg
 from numpy.ma import exp
 from rpy2.rinterface import NA
 
+#from def_format_sdg import def_format_sdg
 
-def calc_sdg_concentration(
+
+def sign_if(x, digits = 3):
+    if x == 0 or not math.isfinite(x):
+        return x
+    digits -= math.ceil(math.log10(abs(x)))
+    return round(x, digits)
+
+def def_calc_sdg_concentration(
     inputFile,
     volGas="gasVolume",
     volH2O="waterVolume",
@@ -20,7 +28,7 @@ def calc_sdg_concentration(
     sourceN2O="concentrationN2OAir"
 ):
     if type(inputFile) is str:
-        inputFile = pd.read.csv(inputFile)
+        inputFile = pd.read_csv(inputFile)
 
     ##### Constants #####
     cGas = 8.3144598  # universal gas constant (J K-1 mol-1)
@@ -49,22 +57,18 @@ def calc_sdg_concentration(
     ##### Calculate dissolved gas concentration in original water sample #####
     inputFile['dissolvedCO2'] = NA
     inputFile['dissolvedCO2'] = inputFile.iloc[:, baro] * cPresConv * (inputFile.iloc[:, volGas] * (inputFile.iloc[:, eqCO2] - inputFile.iloc[:, sourceCO2]) / (
-                                                cGas * (inputFile.iloc[:, headspaceTemp] + cKelvin) * inputFile.iloc[:, volH2O]) + ckHCO2 * exp(cdHdTCO2 *
+                                                cGas * (inputFile.iloc[:, headspaceTemp] + cKelvin)* inputFile.iloc[:, volH2O]) + ckHCO2 * exp(cdHdTCO2 *
                                                 (1 / (inputFile.iloc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.iloc[:, eqCO2])
 
-#    inputFile['dissolvedCH4'] = NA
-#    inputFile['dissolvedCH4'] = inputFile[, baro] *cPresConv *
- #                                                 (inputFile[, volGas] * (inputFile[, eqCH4] - inputFile[, sourceCH4]) / (
-#                                                  cGas * (inputFile[, headspaceTemp] + cKelvin) * inputFile[, volH2O]) +
-#                                                  ckHCH4 * exp(
-#        cdHdTCH4 * (1 / (inputFile[, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile[, eqCH4])
+    inputFile['dissolvedCH4'] = NA
+    inputFile['dissolvedCH4'] = inputFile.iloc[:, baro] * cPresConv *(inputFile.iloc[:, volGas] * (inputFile.iloc[:, eqCH4] - inputFile.iloc[:, sourceCH4]) / (
+                                                  cGas * (inputFile.iloc[:, headspaceTemp] + cKelvin) * inputFile.iloc[:, volH2O]) +
+                                                  ckHCH4 * exp(cdHdTCH4 * (1 / (inputFile.iloc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.iloc[:, eqCH4])
 
-#    inputFile['dissolvedN2O'] = NA
-#    inputFile['dissolvedN2O'] = inputFile[, baro] *cPresConv *
- #                                                 (inputFile[, volGas] * (inputFile[, eqN2O] - inputFile[, sourceN2O]) / (
-#                                                  cGas * (inputFile[, headspaceTemp] + cKelvin) * inputFile[, volH2O]) +
-#                                                  ckHN2O * exp(
-#        cdHdTN2O * (1 / (inputFile[, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile[, eqN2O])
+    inputFile['dissolvedN2O'] = NA
+    inputFile['dissolvedN2O'] = inputFile.iloc[:, baro] * cPresConv * (inputFile.iloc[:, volGas] * (inputFile.iloc[:, eqN2O] - inputFile.iloc[:, sourceN2O]) / (
+                                                  cGas * (inputFile.iloc[:, headspaceTemp] + cKelvin) * inputFile.iloc[:, volH2O]) +
+                                                  ckHN2O * exp(cdHdTN2O * (1 / (inputFile.iloc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.iloc[:, eqN2O])
 
     ##### Step-by-step Calculation of dissolved gas concentrations for testing #####
 
@@ -73,7 +77,7 @@ def calc_sdg_concentration(
     # calculated concentration in the equilibrated headspace water (eqHeadspaceWaterCO2),
     # and the volumes of the headspace water and headspace gas, following:
 
-    # dissolvedGas  = ((eqGas * volGas) + (eqHeadspaceWaterGas * volH2O) - (sourceGas * volGas)) / volH2O
+    #dissolvedGas = ((eqGas * volGas) + (eqHeadspaceWaterGas * volH2O) - (sourceGas * volGas)) / volH2O
 
     # Measured headspace concentration should be expressed as mol L- for the mass
     # balance calculation and as partial pressure for the equilibrium calculation.
@@ -113,12 +117,16 @@ def calc_sdg_concentration(
     # inputFile$dissolvedCH4 <- CH4wat/(volH2O/1000)
     # inputFile$dissolvedN2O <- N2Owat/(volH2O/1000)
 
+
     # Round to significant figures
- #   inputFile$dissolvedCO2 < - signif(inputFile$dissolvedCO2, digits = 3)
- #   inputFile$dissolvedCH4 < - signif(inputFile$dissolvedCH4, digits = 3)
-#    inputFile$dissolvedN2O < - signif(inputFile$dissolvedN2O, digits = 3)
+    inputFile['dissolvedCO2'] = sign_if(inputFile['dissolvedCO2'], 3)
+    inputFile['dissolvedCH4'] = sign_if(inputFile['dissolvedCH4'], 3)
+    inputFile['dissolvedN2O'] = sign_if(inputFile['dissolvedN2O'], 3)
 
     return inputFile
 
 
-#inputFile = calc_sdg_concentration()
+#sdgFormatted = def_format_sdg(data_dir= data_dir)
+#sdgDataPlusConc = def_calc_sdg_conc(inputFile=sdgFormatted)
+
+
