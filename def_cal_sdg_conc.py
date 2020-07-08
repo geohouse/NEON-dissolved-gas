@@ -2,19 +2,14 @@ import os
 
 import pandas as pd
 import math
-from def_format_sdg import def_format_sdg
+#from def_format_sdg import def_format_sdg
+from numpy import nan
+
 import def_format_sdg as deffg
 import math
 import numpy as np
 from numpy.ma import exp
 from rpy2.rinterface import NA
-
-
-def sign_if(x, digits = 3):
-    if x == 0 or not math.isfinite(x):
-        return x
-    digits -= math.ceil(math.log10(abs(x)))
-    return round(x, digits)
 
 
 #sdgFormatted = deffg.def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip')
@@ -54,27 +49,24 @@ def def_cal_sdg_conc(
     cdHdTN2O = 2700  # K, range: 2600 - 3600
 
     ##### Populate mean global values for reference air where it isn't reported #####
-  #  if inputFile[sourceCO2] == pd.np.nan:
- #       inputFile[sourceCO2] = 405  # use global mean https://www.esrl.noaa.gov/gmd/ccgg/trends/global.html
+    inputFile.loc[:, sourceCO2] = inputFile.loc[:, sourceCO2].replace(nan, 405)
 
-    #if inputFile.iloc[sourceCH4].isna() is True:
-    #    inputFile.iloc[sourceCH4] = 1.85  # https://www.esrl.noaa.gov/gmd/ccgg/trends_ch4/
+    inputFile.loc[:, sourceCH4] = inputFile.loc[:, sourceCH4].replace(nan, 1.85)
 
-   # if inputFile.iloc[:, 'sourceN2O'].isna() is True:
-    #    inputFile.iloc[:, 'sourceN2O'] = 0.330  # https://www.esrl.noaa.gov/gmd/hats/combined/N2O.html
+    inputFile.loc[:, sourceN2O] = inputFile.loc[:, sourceN2O].replace(nan, 0.330)
 
     ##### Calculate dissolved gas concentration in original water sample #####
-    inputFile['dissolvedCO2'] = pd.np.nan
+    inputFile['dissolvedCO2'] = np.nan
     inputFile['dissolvedCO2'] = inputFile.loc[:, baro] * cPresConv * (inputFile.loc[:, volGas] * (inputFile.loc[:, eqCO2] - inputFile.loc[:, sourceCO2]) / (
                                                     cGas * (inputFile.loc[:, headspaceTemp] + cKelvin) * inputFile.loc[:, volH2O]) +
                                                     ckHCO2 * np.exp(cdHdTCO2 * (1 / (inputFile.loc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.loc[:, eqCO2])
 
-    inputFile['dissolvedCH4'] = pd.np.nan
+    inputFile['dissolvedCH4'] = np.nan
     inputFile['dissolvedCH4'] = inputFile.loc[:, baro] * cPresConv * (inputFile.loc[:, volGas] * (inputFile.loc[:, eqCH4] - inputFile.loc[:, sourceCH4]) / (
                                                   cGas * (inputFile.loc[:, headspaceTemp] + cKelvin) * inputFile.loc[:, volH2O]) +
                                                   ckHCH4 * np.exp(cdHdTCH4 * (1 / (inputFile.loc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.loc[:, eqCH4])
 
-    inputFile['dissolvedN2O'] = pd.np.nan
+    inputFile['dissolvedN2O'] = np.nan
     inputFile['dissolvedN2O'] = inputFile.loc[:, baro] * cPresConv * (inputFile.loc[:, volGas] * (inputFile.loc[:, eqN2O] - inputFile.loc[:, sourceN2O]) / (
                                                   cGas * (inputFile.loc[:, headspaceTemp] + cKelvin) * inputFile.loc[:, volH2O]) +
                                                   ckHN2O * np.exp(cdHdTN2O * (1 / (inputFile.loc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.loc[:, eqN2O])
@@ -128,11 +120,26 @@ def def_cal_sdg_conc(
 
 
     # Round to significant figures
- #   inputFile['dissolvedCO2'] = sign_if(inputFile['dissolvedCO2'], 3)
- #   inputFile['dissolvedCH4'] = sign_if(inputFile['dissolvedCH4'], 3)
-  #  inputFile['dissolvedN2O'] = sign_if(inputFile['dissolvedN2O'], 3)
+   # inputFile['dissolvedCO2'] = round_sig(inputFile['dissolvedCO2'])
+  #  inputFile['dissolvedCH4'] = round_sig(inputFile['dissolvedCH4'])
+
+   # inputFile['dissolvedN2O'] = sign_if(inputFile['dissolvedN2O'])
 
     return inputFile
+#'%s' % float('%.1g' % 0.12)
+
+def sign_if(x, digits = 3):
+    if x == 0 or not math.isfinite(x):
+        return x
+    digits -= math.ceil(math.log10(abs(x)))
+    return round(x, digits)
+
+
+
+def round_sig(x, sig=3):
+    return round(x, sig - int(math.floor(math.log10(abs(x)))) - 1)
+
+  #  return round(x, sig - int(math.floor(math.log10(abs(x)))) - 1)
 
 
 sdgFormatted = deffg.def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip')
