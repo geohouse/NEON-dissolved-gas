@@ -63,7 +63,7 @@ def def_calc_sdg_sat(
     inputFile['CH4PercSat'] = inputFile.iloc[:, concCH4] / inputFile['satConcCH4'] * cConcPerc
     inputFile['N2OPercSat'] = inputFile.iloc[:, concN2O] / inputFile['satConcN2O'] * cConcPerc
 
-
     return inputFile
 
-#inputFile = def_calc_sdg_sat()
+
+inputFile = def_calc_sdg_sat()

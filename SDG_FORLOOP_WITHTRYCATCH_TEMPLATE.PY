@@ -1,4 +1,4 @@
-from testing import outputDF, externalLabData
+from def_format_sdg import outputDF, externalLabData
 
 for x in range(len(outputDF['waterSampleID'])):
     # print(x)

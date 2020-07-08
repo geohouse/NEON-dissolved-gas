@@ -2,13 +2,12 @@ import os
 
 import pandas as pd
 import math
-#import format_sdg
-from numpy import nan
-from numpy.ma import exp
-from rpy2.rinterface import NA
-
 from def_format_sdg import def_format_sdg
 import def_format_sdg as deffg
+import math
+import numpy as np
+from numpy.ma import exp
+from rpy2.rinterface import NA
 
 
 def sign_if(x, digits = 3):
@@ -18,11 +17,11 @@ def sign_if(x, digits = 3):
     return round(x, digits)
 
 
-sdgFormatted = deffg.def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip')
-inputFile = sdgFormatted
+#sdgFormatted = deffg.def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip')
+#inputFile = sdgFormatted
 
 
-def def_calc_sdg_concentration(
+def def_cal_sdg_conc(
     inputFile,
     volGas="gasVolume",
     volH2O="waterVolume",
@@ -36,6 +35,7 @@ def def_calc_sdg_concentration(
     eqN2O="concentrationN2OGas",
     sourceN2O="concentrationN2OAir"
 ):
+
     if type(inputFile) is str:
         inputFile = pd.read_csv(inputFile)
 
@@ -50,14 +50,13 @@ def def_calc_sdg_concentration(
     ckHCH4 = 0.000014  # mol m-3 Pa, range: 0.0000096 - 0.000092
     ckHN2O = 0.00024  # mol m-3 Pa, range: 0.00018 - 0.00025
     cdHdTCO2 = 2400  # K, range: 2300 - 2600
-    cdHdTCH4 = 1900  # K, range: 1400-2400
+    cdHdTCH4 = 1900  # K, range: 1400-24
     cdHdTN2O = 2700  # K, range: 2600 - 3600
 
     ##### Populate mean global values for reference air where it isn't reported #####
-    if inputFile.iloc[:, 'sourceCO2'].isna():
-        inputFile.iloc[:, 'sourceCO2'] = 405  # use global mean https://www.esrl.noaa.gov/gmd/ccgg/trends/global.html
-    else:
-        inputFile.iloc[:, sourceCO2] = inputFile.iloc[:, sourceCO2]
+  #  if inputFile[sourceCO2] == pd.np.nan:
+ #       inputFile[sourceCO2] = 405  # use global mean https://www.esrl.noaa.gov/gmd/ccgg/trends/global.html
+
     #if inputFile.iloc[sourceCH4].isna() is True:
     #    inputFile.iloc[sourceCH4] = 1.85  # https://www.esrl.noaa.gov/gmd/ccgg/trends_ch4/
 
@@ -65,22 +64,21 @@ def def_calc_sdg_concentration(
     #    inputFile.iloc[:, 'sourceN2O'] = 0.330  # https://www.esrl.noaa.gov/gmd/hats/combined/N2O.html
 
     ##### Calculate dissolved gas concentration in original water sample #####
-    inputFile['dissolvedCO2'] = nan
-    inputFile['dissolvedCO2'] = inputFile.iloc[:, baro] * cPresConv * (inputFile.iloc[:, volGas] * (inputFile.iloc[:, eqCO2] - inputFile.iloc[:, sourceCO2]) / (
-                                                cGas * (inputFile.iloc[:, headspaceTemp] + cKelvin)* inputFile.iloc[:, volH2O]) + ckHCO2 * exp(cdHdTCO2 *
-                                                (1 / (inputFile.iloc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.iloc[:, eqCO2])
+    inputFile['dissolvedCO2'] = pd.np.nan
+    inputFile['dissolvedCO2'] = inputFile.loc[:, baro] * cPresConv * (inputFile.loc[:, volGas] * (inputFile.loc[:, eqCO2] - inputFile.loc[:, sourceCO2]) / (
+                                                    cGas * (inputFile.loc[:, headspaceTemp] + cKelvin) * inputFile.loc[:, volH2O]) +
+                                                    ckHCO2 * np.exp(cdHdTCO2 * (1 / (inputFile.loc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.loc[:, eqCO2])
 
-    inputFile['dissolvedCH4'] = nan
-    inputFile['dissolvedCH4'] = inputFile.iloc[:, baro] * cPresConv *(inputFile.iloc[:, volGas] * (inputFile.iloc[:, eqCH4] - inputFile.iloc[:, sourceCH4]) / (
-                                                  cGas * (inputFile.iloc[:, headspaceTemp] + cKelvin) * inputFile.iloc[:, volH2O]) +
-                                                  ckHCH4 * exp(cdHdTCH4 * (1 / (inputFile.iloc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.iloc[:, eqCH4])
+    inputFile['dissolvedCH4'] = pd.np.nan
+    inputFile['dissolvedCH4'] = inputFile.loc[:, baro] * cPresConv * (inputFile.loc[:, volGas] * (inputFile.loc[:, eqCH4] - inputFile.loc[:, sourceCH4]) / (
+                                                  cGas * (inputFile.loc[:, headspaceTemp] + cKelvin) * inputFile.loc[:, volH2O]) +
+                                                  ckHCH4 * np.exp(cdHdTCH4 * (1 / (inputFile.loc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.loc[:, eqCH4])
 
-    inputFile['dissolvedN2O'] = nan
-    inputFile['dissolvedN2O'] = inputFile.iloc[:, baro] * cPresConv * (inputFile.iloc[:, volGas] * (inputFile.iloc[:, eqN2O] - inputFile.iloc[:, sourceN2O]) / (
-                                                  cGas * (inputFile.iloc[:, headspaceTemp] + cKelvin) * inputFile.iloc[:, volH2O]) +
-                                                  ckHN2O * exp(cdHdTN2O * (1 / (inputFile.iloc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.iloc[:, eqN2O])
+    inputFile['dissolvedN2O'] = pd.np.nan
+    inputFile['dissolvedN2O'] = inputFile.loc[:, baro] * cPresConv * (inputFile.loc[:, volGas] * (inputFile.loc[:, eqN2O] - inputFile.loc[:, sourceN2O]) / (
+                                                  cGas * (inputFile.loc[:, headspaceTemp] + cKelvin) * inputFile.loc[:, volH2O]) +
+                                                  ckHN2O * np.exp(cdHdTN2O * (1 / (inputFile.loc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.loc[:, eqN2O])
 
-    print(sdgFormatted)
     ##### Step-by-step Calculation of dissolved gas concentrations for testing #####
 
     # Dissolved gas concentration in the original water samples (dissolvedGas) is
@@ -94,7 +92,7 @@ def def_calc_sdg_concentration(
     # balance calculation and as partial pressure for the equilibrium calculation.
 
     # #Temperature corrected Henry's Law Constant
-    # HCO2 <- ckHCO2 * exp(cdHdTCO2 * ((1/(headspaceTemp+cKelvin)) - (1/cT0)))
+    #HCO2 = ckHCO2 * exp(cdHdTCO2 * ((1/(headspaceTemp+cKelvin)) - (1/cT0)))
     # HCH4 <- ckHCH4 * exp(cdHdTCH4 * ((1/(headspaceTemp+cKelvin)) - (1/cT0)))
     # HN2O <- ckHN2O * exp(cdHdTN2O * ((1/(headspaceTemp+cKelvin)) - (1/cT0)))
     #
@@ -130,14 +128,18 @@ def def_calc_sdg_concentration(
 
 
     # Round to significant figures
-    inputFile['dissolvedCO2'] = sign_if(inputFile['dissolvedCO2'], 3)
-    inputFile['dissolvedCH4'] = sign_if(inputFile['dissolvedCH4'], 3)
-    inputFile['dissolvedN2O'] = sign_if(inputFile['dissolvedN2O'], 3)
+ #   inputFile['dissolvedCO2'] = sign_if(inputFile['dissolvedCO2'], 3)
+ #   inputFile['dissolvedCH4'] = sign_if(inputFile['dissolvedCH4'], 3)
+  #  inputFile['dissolvedN2O'] = sign_if(inputFile['dissolvedN2O'], 3)
 
     return inputFile
 
 
-#sdgFormatted = deffg.def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip')
+sdgFormatted = deffg.def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip')
+inputFile = def_cal_sdg_conc(inputFile=sdgFormatted)
+
+
+#sdgFormatted = def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip')
 #sdgDataPlusConce = def_calc_sdg_concentration(sdgFormatted)
 
 #inputFile = sdgFormatted
