@@ -1,15 +1,12 @@
 import os
 
 import pandas as pd
-import math
 #from def_format_sdg import def_format_sdg
 from numpy import nan
 
 import def_format_sdg as deffg
 import math
 import numpy as np
-from numpy.ma import exp
-from rpy2.rinterface import NA
 
 
 #sdgFormatted = deffg.def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip')
@@ -49,11 +46,12 @@ def def_cal_sdg_conc(
     cdHdTN2O = 2700  # K, range: 2600 - 3600
 
     ##### Populate mean global values for reference air where it isn't reported #####
-    inputFile.loc[:, sourceCO2] = inputFile.loc[:, sourceCO2].replace(nan, 405)
 
-    inputFile.loc[:, sourceCH4] = inputFile.loc[:, sourceCH4].replace(nan, 1.85)
+    inputFile.loc[:, sourceCO2] = inputFile.loc[:, sourceCO2].replace(nan, 405)  # use global mean https://www.esrl.noaa.gov/gmd/ccgg/trends/global.html
 
-    inputFile.loc[:, sourceN2O] = inputFile.loc[:, sourceN2O].replace(nan, 0.330)
+    inputFile.loc[:, sourceCH4] = inputFile.loc[:, sourceCH4].replace(nan, 1.85)  #https://www.esrl.noaa.gov/gmd/ccgg/trends_ch4/
+
+    inputFile.loc[:, sourceN2O] = inputFile.loc[:, sourceN2O].replace(nan, 0.330)  #https://www.esrl.noaa.gov/gmd/hats/combined/N2O.html
 
     ##### Calculate dissolved gas concentration in original water sample #####
     inputFile['dissolvedCO2'] = np.nan

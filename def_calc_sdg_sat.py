@@ -1,7 +1,12 @@
 from math import exp
+import os
 
+import mpmath as mpmath
 import pandas as pd
-from numpy import character
+from numpy import character, nan, math
+import numpy as np
+import def_format_sdg as deffg
+import def_cal_sdg_conc as defcsc
 
 
 def def_calc_sdg_sat(
@@ -17,10 +22,9 @@ def def_calc_sdg_sat(
     sourceN2O="concentrationN2OAir"
 ):
 
+    if type(inputFile) is str:
 
-    if type(inputFile) is character:
-
-        inputFile = pd.read.csv(inputFile)
+        inputFile = pd.read_csv(inputFile)
 
 
     ##### Constants #####
@@ -40,30 +44,31 @@ def def_calc_sdg_sat(
 
 
     ##### Populate mean global values for reference air where it isn't reported #####
-    if inputFile.iloc[:, sourceCO2].isna() is True:
-        inputFile.iloc[:, sourceCO2] = 405  # use global mean https://www.esrl.noaa.gov/gmd/ccgg/trends/global.html
+    inputFile.loc[:, sourceCO2] = inputFile.loc[:, sourceCO2].replace(nan, 405)  # use global mean https://www.esrl.noaa.gov/gmd/ccgg/trends/global.html
 
-    if inputFile.iloc[:, sourceCH4].isna() is True:
-        inputFile.iloc[:, sourceCH4] = 1.85  # https://www.esrl.noaa.gov/gmd/ccgg/trends_ch4/
+    inputFile.loc[:, sourceCH4] = inputFile.loc[:, sourceCH4].replace(nan, 1.85)  #https://www.esrl.noaa.gov/gmd/ccgg/trends_ch4/
 
-    if inputFile.iloc[:, sourceN2O].isna() is True:
-        inputFile.iloc[:, sourceN2O] = 0.330  # https://www.esrl.noaa.gov/gmd/hats/combined/N2O.html
+    inputFile.loc[:, sourceN2O] = inputFile.loc[:, sourceN2O].replace(nan, 0.330)  #https://www.esrl.noaa.gov/gmd/hats/combined/N2O.html
 
     ##### Calculate dissolved gas concentration at 100% saturation #####
 
     # 100% saturation occurs when the dissolved gas concentration is in equilibrium
     # with the atmosphere.
-    inputFile['satConcCO2'] = (ckHCO2 * exp(cdHdTCO2 * (1 / (inputFile.iloc[:, waterTemp] + cKelvin) - 1 / cT0)))\
-                              * inputFile.iloc[:, sourceCO2] * inputFile.iloc[:, baro] *cPresConv
-    inputFile['satConcCH4'] = (ckHCH4 * exp(cdHdTCH4 * (1 / (inputFile.iloc[:, waterTemp] + cKelvin) - 1 / cT0))) * inputFile.iloc[:, sourceCH4] * inputFile.iloc[:, baro] *cPresConv
-    inputFile['satConcN2O'] = (ckHN2O * exp(cdHdTN2O * (1 / (inputFile.iloc[:, waterTemp] + cKelvin) - 1 / cT0))) * inputFile.iloc[:, sourceN2O] * inputFile.iloc[:, baro] *cPresConv
+    inputFile['satConcCO2'] = np.nan
+#    inputFile['satConcCO2'] = pow(ckHCO2 * mpmath.exp(cdHdTCO2 * (1 / (inputFile.loc[:, waterTemp] + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceCO2] * inputFile.loc[:, baro] * cPresConv
+    #inputFile['satConcCO2'] = (ckHCO2 * np.exp(cdHdTCO2 * (1 / (inputFile.loc[:, waterTemp] + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceCO2] * inputFile.loc[:, baro] * cPresConv
 
-    ##### Calculate dissolved gas concentration as % saturation #####
-    inputFile['CO2PercSat'] = inputFile.iloc[:, concCO2] / inputFile['satConcCO2'] * cConcPerc
-    inputFile['CH4PercSat'] = inputFile.iloc[:, concCH4] / inputFile['satConcCH4'] * cConcPerc
-    inputFile['N2OPercSat'] = inputFile.iloc[:, concN2O] / inputFile['satConcN2O'] * cConcPerc
+  #  inputFile['satConcCH4'] = (ckHCH4 * math.pow(cdHdTCH4 * (1 / (inputFile.loc[:, waterTemp] + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceCH4] * inputFile.loc[:, baro] * cPresConv
+  ##  inputFile['satConcN2O'] = (ckHN2O * mpmath.exp(cdHdTN2O * (1 / (inputFile.loc[:, waterTemp] + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceN2O] * inputFile.loc[:, baro] * cPresConv
+
+    ##### Calculate dissolved gas concentration as % saturation #####                                ['satConcCO2']
+    inputFile['CO2PercSat'] = inputFile.loc[:, concCO2] / inputFile.loc[:, 'satConcCO2'] * cConcPerc
+    #inputFile['CH4PercSat'] = inputFile.loc[:, concCH4] / inputFile['satConcCH4'] * cConcPerc
+    #inputFile['N2OPercSat'] = inputFile.loc[:, concN2O] / inputFile['satConcN2O'] * cConcPerc
 
     return inputFile
 
 
-inputFile = def_calc_sdg_sat()
+sdgFormatted = deffg.def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip')
+sdgDataPlusConc = defcsc.def_cal_sdg_conc(inputFile=sdgFormatted)
+inputFile = def_calc_sdg_sat(inputFile=sdgDataPlusConc)
