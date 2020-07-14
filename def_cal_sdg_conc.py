@@ -47,7 +47,7 @@ def def_cal_sdg_conc(
 
     ##### Populate mean global values for reference air where it isn't reported #####
 
-    inputFile.loc[:, sourceCO2] = inputFile.loc[:, sourceCO2].replace(nan, 405)  # use global mean https://www.esrl.noaa.gov/gmd/ccgg/trends/global.html
+    inputFile.loc[:, sourceCO2] = inputFile.loc[:, sourceCO2].replace(nan, 405)   # use global mean https://www.esrl.noaa.gov/gmd/ccgg/trends/global.html
 
     inputFile.loc[:, sourceCH4] = inputFile.loc[:, sourceCH4].replace(nan, 1.85)  #https://www.esrl.noaa.gov/gmd/ccgg/trends_ch4/
 
@@ -68,6 +68,10 @@ def def_cal_sdg_conc(
     inputFile['dissolvedN2O'] = inputFile.loc[:, baro] * cPresConv * (inputFile.loc[:, volGas] * (inputFile.loc[:, eqN2O] - inputFile.loc[:, sourceN2O]) / (
                                                   cGas * (inputFile.loc[:, headspaceTemp] + cKelvin) * inputFile.loc[:, volH2O]) +
                                                   ckHN2O * np.exp(cdHdTN2O * (1 / (inputFile.loc[:, headspaceTemp] + cKelvin) - 1 / cT0)) * inputFile.loc[:, eqN2O])
+
+   # inputFile['satConcCO2'] = np.nan
+    #test = inputFile.loc[:, waterTemp]
+  #  inputFile['satConcCO2'] = inputFile.loc[:, sourceCO2] * inputFile.loc[:, baro] * cPresConv * (ckHCO2 * np.exp(cdHdTCO2 * (1 / (inputFile.loc[:, waterTemp] + cKelvin) - 1 / cT0)))
 
     ##### Step-by-step Calculation of dissolved gas concentrations for testing #####
 

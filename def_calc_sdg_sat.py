@@ -7,7 +7,7 @@ from numpy import character, nan, math
 import numpy as np
 import def_format_sdg as deffg
 import def_cal_sdg_conc as defcsc
-
+from decimal import Decimal
 
 def def_calc_sdg_sat(
     inputFile,
@@ -55,16 +55,21 @@ def def_calc_sdg_sat(
     # 100% saturation occurs when the dissolved gas concentration is in equilibrium
     # with the atmosphere.
     inputFile['satConcCO2'] = np.nan
-#    inputFile['satConcCO2'] = pow(ckHCO2 * mpmath.exp(cdHdTCO2 * (1 / (inputFile.loc[:, waterTemp] + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceCO2] * inputFile.loc[:, baro] * cPresConv
-    #inputFile['satConcCO2'] = (ckHCO2 * np.exp(cdHdTCO2 * (1 / (inputFile.loc[:, waterTemp] + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceCO2] * inputFile.loc[:, baro] * cPresConv
-
-  #  inputFile['satConcCH4'] = (ckHCH4 * math.pow(cdHdTCH4 * (1 / (inputFile.loc[:, waterTemp] + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceCH4] * inputFile.loc[:, baro] * cPresConv
-  ##  inputFile['satConcN2O'] = (ckHN2O * mpmath.exp(cdHdTN2O * (1 / (inputFile.loc[:, waterTemp] + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceN2O] * inputFile.loc[:, baro] * cPresConv
+    test = inputFile.loc[:, waterTemp]
+  #  inputFile['satConcCO2'] = (ckHCO2 * np.exp(cdHdTCO2 * (1 / ((test.astype(np.float64)) + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceCO2] * inputFile.loc[:, baro] * cPresConv
+    #for i in inputFile['satConcCO2']:
+    inputFile['satConcCO2'] = (ckHCO2 * np.exp(cdHdTCO2 * (1 / ((test.astype(np.float)) + cKelvin) - 1 / cT0))) * inputFile.loc[:,sourceCO2] * inputFile.loc[:, baro] * cPresConv
+       # "{:.2E}".format(Decimal(i))
+ #   inputFile['satConcCO2'] = (ckHCO2 * np.exp(cdHdTCO2 * (1 / ((test.astype(np.float64)) + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceCO2] * inputFile.loc[:, baro] * cPresConv
+    inputFile['satConcCH4'] = np.nan
+  #  inputFile['satConcCH4'] = (ckHCH4 * np.exp(cdHdTCH4 * (1 / ((test.astype(np.float64)) + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceCH4] * inputFile.loc[:, baro] * cPresConv
+    inputFile['satConcN2O'] = np.nan
+ #   inputFile['satConcN2O'] = (ckHN2O * np.exp(cdHdTN2O * (1 / ((test.astype(np.float64)) + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceN2O] * inputFile.loc[:, baro] * cPresConv
 
     ##### Calculate dissolved gas concentration as % saturation #####                                ['satConcCO2']
-    inputFile['CO2PercSat'] = inputFile.loc[:, concCO2] / inputFile.loc[:, 'satConcCO2'] * cConcPerc
-    #inputFile['CH4PercSat'] = inputFile.loc[:, concCH4] / inputFile['satConcCH4'] * cConcPerc
-    #inputFile['N2OPercSat'] = inputFile.loc[:, concN2O] / inputFile['satConcN2O'] * cConcPerc
+    inputFile['CO2PercSat'] = inputFile.loc[:, concCO2] / inputFile['satConcCO2'] * cConcPerc
+    inputFile['CH4PercSat'] = inputFile.loc[:, concCH4] / inputFile['satConcCH4'] * cConcPerc
+    inputFile['N2OPercSat'] = inputFile.loc[:, concN2O] / inputFile['satConcN2O'] * cConcPerc
 
     return inputFile
 
