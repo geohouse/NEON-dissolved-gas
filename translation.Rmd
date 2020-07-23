@@ -14,42 +14,7 @@ The following R markdown compares the R to Python scripts by displaying the outp
 R scripts are loaded above the Python script translation. The first data frame corresponds to the formatted data frame, 
 which will be used as the base to both R and Python scripts below. 
 
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Loading devtools library, setting the working dictionary, and installing 'neonDissGas'.
-```{r}
-library(devtools)
-setwd("~/NEON-dissolved-gas")
-install("neonDissGas", upgrade = "never")
-```
-R Script
-Formatted Data Frame:
-The data frame below is the output data frame formatted by 'def.format.sdg.R' and will be used by both R and Python's blocks of code below. 
-
-It contains the following columns:
-waterSampleID, referenceAirSampleID, equilibratedAirSampleID, collectDate, processedDate, stationID, barometricPressure, headspaceTemp, waterTemp, concentrationCO2Air, concentrationCO2Gas, concentrationCH4Air, concentrationCH4Gas, concentrationN2OAir, concentrationN2OGas, waterVolume, gasVolume, volH2OSource, volGasSource
-
-```{r }
-library(neonUtilities)
-sdgFormatted <- def.format.sdg(dataDir = "/Users/marcelarodriguez/PycharmProjects/NEON-DissolvedGas/NEON_dissolved-gases-surfacewater(1).zip")
-sdgFormatted
-```
-
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Dissolved Gas Concentration Data Frame
-
-R Script:
-This data frame adds 3 new columns: dissolvedCO2, dissolvedCH4, and dissolvedN2O.
-```{r }
-library(neonUtilities)
-library(neonDissGas)
-sdgDataPlusConc <- def.calc.sdg.conc(inputFile = sdgFormatted)
-sdgDataPlusConc
-```
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 Initiation of Python
 
 ```{r}
@@ -62,6 +27,41 @@ Check if the version of Python you are using is the same as the Python the code 
 import sys
 print(sys.version)
 ```
+---
+Loading devtools library, setting the working dictionary, and installing 'neonDissGas'.
+```{r}
+library(devtools)
+setwd("~/NEON-dissolved-gas")
+install("neonDissGas", upgrade = "never")
+```
+
+---
+Formatted Data Frame
+
+R Script:
+The data frame below is the output data frame formatted by 'def.format.sdg.R' and will be used by both R and Python's blocks of code below. 
+
+It contains the following columns:
+waterSampleID, referenceAirSampleID, equilibratedAirSampleID, collectDate, processedDate, stationID, barometricPressure, headspaceTemp, waterTemp, concentrationCO2Air, concentrationCO2Gas, concentrationCH4Air, concentrationCH4Gas, concentrationN2OAir, concentrationN2OGas, waterVolume, gasVolume, volH2OSource, volGasSource
+
+```{r }
+library(neonUtilities)
+sdgFormatted <- def.format.sdg(dataDir = "/Users/marcelarodriguez/PycharmProjects/NEON-DissolvedGas/NEON_dissolved-gases-surfacewater(1).zip")
+sdgFormatted
+```
+
+---
+Dissolved Gas Concentration Data Frame
+
+R Script:
+This data frame adds 3 new columns: dissolvedCO2, dissolvedCH4, and dissolvedN2O.
+```{r }
+library(neonUtilities)
+library(neonDissGas)
+sdgDataPlusConc <- def.calc.sdg.conc(inputFile = sdgFormatted)
+sdgDataPlusConc
+```
+
 
 TRANSLATION TO PYTHON: 
 
@@ -80,8 +80,8 @@ gasConcentration = def_calc_sdg_conc(inputFile=r.sdgFormatted)
 ```{r }
 py$gasConcentration
 ```
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+---
 Dissolved Gases' Saturation Data Frame
 
 R Script:
@@ -99,12 +99,10 @@ TRANSLATION TO PYTHON:
 ```{python}
 import os
 os.chdir('/Users/marcelarodriguez/PycharmProjects/NEON-DissolvedGas')
-#print(os.getcwd())
 
 from def_calc_sdg_sat import def_calc_sdg_sat
 import pandas
 
-#sdgFormatted = (data_dir= '/Users/marcelarodriguez/PycharmProjects/NEON-DissolvedGas/NEON_dissolved-gases-surfacewater.zip')
 gasSaturation = def_calc_sdg_sat(inputFile=gasConcentration)
 
 ```

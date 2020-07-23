@@ -64,7 +64,9 @@
 
 ##############################################################################################
 import pandas as pd
+from numpy import nan
 import numpy as np
+
 
 def def_calc_sdg_conc(
     inputFile,
@@ -100,11 +102,11 @@ def def_calc_sdg_conc(
 
     ##### Populate mean global values for reference air where it isn't reported #####
 
-    inputFile.loc[:, sourceCO2] = inputFile.loc[:, sourceCO2].replace(np.nan, 405)   # use global mean https://www.esrl.noaa.gov/gmd/ccgg/trends/global.html
+    inputFile.loc[:, sourceCO2] = inputFile.loc[:, sourceCO2].replace(nan, 405)   # use global mean https://www.esrl.noaa.gov/gmd/ccgg/trends/global.html
 
-    inputFile.loc[:, sourceCH4] = inputFile.loc[:, sourceCH4].replace(np.nan, 1.85)  #https://www.esrl.noaa.gov/gmd/ccgg/trends_ch4/
+    inputFile.loc[:, sourceCH4] = inputFile.loc[:, sourceCH4].replace(nan, 1.85)  #https://www.esrl.noaa.gov/gmd/ccgg/trends_ch4/
 
-    inputFile.loc[:, sourceN2O] = inputFile.loc[:, sourceN2O].replace(np.nan, 0.330)  #https://www.esrl.noaa.gov/gmd/hats/combined/N2O.html
+    inputFile.loc[:, sourceN2O] = inputFile.loc[:, sourceN2O].replace(nan, 0.330)  #https://www.esrl.noaa.gov/gmd/hats/combined/N2O.html
 
     ##### Calculate dissolved gas concentration in original water sample #####
     inputFile['dissolvedCO2'] = np.nan
