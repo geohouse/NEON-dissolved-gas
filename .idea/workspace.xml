@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7c51385e-5d0d-4d07-b58a-d6218cda2dbe" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/translation.Rmd" beforeDir="false" afterPath="$PROJECT_DIR$/translation.Rmd" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -286,7 +285,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595543374056</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="changes to translation markdown">
+      <created>1595544102682</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1595544102683</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -318,7 +324,8 @@
     <MESSAGE value="deleted unnecessary files" />
     <MESSAGE value="add imports" />
     <MESSAGE value="made changes to files" />
-    <option name="LAST_COMMIT_MESSAGE" value="made changes to files" />
+    <MESSAGE value="changes to translation markdown" />
+    <option name="LAST_COMMIT_MESSAGE" value="changes to translation markdown" />
   </component>
   <component name="WindowStateProjectService">
     <state x="-1496" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1595539967581">
@@ -334,10 +341,10 @@
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
     <state x="-909" y="286" width="667" height="579" key="#xdebugger.evaluate/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1593724492826" />
-    <state x="-1334" y="-38" width="1164" height="795" key="CommitChangelistDialog2" timestamp="1595543373901">
+    <state x="-1334" y="-38" width="1164" height="795" key="CommitChangelistDialog2" timestamp="1595544102478">
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
-    <state x="-1334" y="-38" width="1164" height="795" key="CommitChangelistDialog2/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595543373901" />
+    <state x="-1334" y="-38" width="1164" height="795" key="CommitChangelistDialog2/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595544102478" />
     <state x="347" y="112" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1593105411231" />
     <state x="-1536" y="-12" width="1152" height="720" key="DiffContextDialog" timestamp="1593554686221">
       <screen x="-1920" y="-180" width="1920" height="1080" />
@@ -402,10 +409,10 @@
     <state width="1899" height="333" key="GridCell.Tab.1.right/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1593814198214" />
     <state width="1899" height="221" key="GridCell.Tab.1.right/0.0.1440.900@0.0.1440.900" timestamp="1593377717114" />
     <state width="1899" height="333" key="GridCell.Tab.1.right/0.23.1440.877/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1593813651050" />
-    <state x="-1360" y="88" key="Vcs.Push.Dialog.v2" timestamp="1595543377119">
+    <state x="-1360" y="88" key="Vcs.Push.Dialog.v2" timestamp="1595544104275">
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
-    <state x="-1360" y="88" key="Vcs.Push.Dialog.v2/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595543377119" />
+    <state x="-1360" y="88" key="Vcs.Push.Dialog.v2/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595544104275" />
     <state x="420" y="223" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1593105413112" />
     <state x="-1432" y="72" key="com.intellij.execution.console.ConsoleHistoryController$MyBrowseAction$1" timestamp="1593720888177">
       <screen x="-1920" y="-180" width="1920" height="1080" />
@@ -430,10 +437,11 @@
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
     <state x="-1387" y="103" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1593712102991" />
-    <state x="-1242" y="158" key="git4idea.merge.GitMergeDialog" timestamp="1595517548557">
+    <state x="-1242" y="158" key="git4idea.merge.GitMergeDialog" timestamp="1595544350963">
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
-    <state x="-1242" y="158" key="git4idea.merge.GitMergeDialog/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595517548557" />
+    <state x="-1242" y="158" key="git4idea.merge.GitMergeDialog/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595544259856" />
+    <state x="-1242" y="158" key="git4idea.merge.GitMergeDialog/0.23.1440.877/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595544350963" />
     <state x="-1295" y="61" width="670" height="676" key="search.everywhere.popup" timestamp="1592950014667">
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
