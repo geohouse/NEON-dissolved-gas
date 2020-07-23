@@ -15,7 +15,6 @@ R scripts are loaded above the Python script translation. The first data frame c
 which will be used as the base to both R and Python scripts below. 
 
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Loading devtools library, setting the working dictionary, and installing 'neonDissGas'.
 ```{r}
@@ -37,7 +36,7 @@ sdgFormatted
 ```
 
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 Dissolved Gas Concentration Data Frame
 
@@ -49,7 +48,7 @@ library(neonDissGas)
 sdgDataPlusConc <- def.calc.sdg.conc(inputFile = sdgFormatted)
 sdgDataPlusConc
 ```
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Initiation of Python
 
 ```{r}
@@ -63,7 +62,10 @@ import sys
 print(sys.version)
 ```
 
+
+
 TRANSLATION TO PYTHON: 
+
 
 ```{python}
 import os
@@ -80,7 +82,7 @@ gasConcentration = def_calc_sdg_conc(inputFile=r.sdgFormatted)
 ```{r }
 py$gasConcentration
 ```
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 Dissolved Gases' Saturation Data Frame
 
