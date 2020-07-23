@@ -22,36 +22,8 @@ library(devtools)
 setwd("~/NEON-dissolved-gas")
 install("neonDissGas", upgrade = "never")
 ```
-R Script
-Formatted Data Frame:
-This data frame below is formatted by 'def.format.sdg.R' and will be used by both R and Python's blocks of code below. 
-```{r }
-library(neonUtilities)
-sdgFormatted <- def.format.sdg(dataDir = "/Users/marcelarodriguez/PycharmProjects/NEON-DissolvedGas/NEON_dissolved-gases-surfacewater(1).zip")
-sdgFormatted
-```
 
-R Script
-Dissolved Gases' Concentration Data Frame:
-This data frame adds 3 new columns: dissolvedCO2, dissolvedCH4, and dissolvedN2O.
-```{r }
-library(neonUtilities)
-library(neonDissGas)
-sdgDataPlusConc <- def.calc.sdg.conc(inputFile = sdgFormatted)
-sdgDataPlusConc
-```
-
-R Script
-Dissolved Gases' Saturation Data Frame:
-This data frame adds 6 new columns: satConcCO2, satConcCH4, satConcN2O, CO2PercSat, CH4PercSat, and N2OPercSat.
-```{r }
-library(neonUtilities)
-library(neonDissGas)
-sdgDataPlusSat <- def.calc.sdg.sat(inputFile = sdgDataPlusConc)
-sdgDataPlusSat
-```
-
-
+Initiation of Python
 ```{r}
 library(reticulate)
 use_python("~/venv/bin/python", required = TRUE)
@@ -63,6 +35,29 @@ import sys
 print(sys.version)
 ```
 
+R Script
+Formatted Data Frame:
+This data frame below is formatted by 'def.format.sdg.R' and will be used by both R and Python's blocks of code below. 
+```{r }
+library(neonUtilities)
+sdgFormatted <- def.format.sdg(dataDir = "/Users/marcelarodriguez/PycharmProjects/NEON-DissolvedGas/NEON_dissolved-gases-surfacewater(1).zip")
+sdgFormatted
+```
+
+
+Dissolved Gases' Concentration Data Frame
+R Script:
+This data frame adds 3 new columns: dissolvedCO2, dissolvedCH4, and dissolvedN2O.
+```{r }
+library(neonUtilities)
+library(neonDissGas)
+sdgDataPlusConc <- def.calc.sdg.conc(inputFile = sdgFormatted)
+sdgDataPlusConc
+```
+
+TRANSLATION TO PYTHON: 
+
+This data frame adds 3 new columns: dissolvedCO2, dissolvedCH4, and dissolvedN2O.
 ```{python}
 import os
 os.chdir('/Users/marcelarodriguez/PycharmProjects/NEON-DissolvedGas')
@@ -76,6 +71,19 @@ gasConcentration = def_calc_sdg_conc(inputFile=r.sdgFormatted)
 ```{r }
 py$gasConcentration
 ```
+
+Dissolved Gases' Saturation Data Frame
+R Script:
+This data frame adds 6 new columns: satConcCO2, satConcCH4, satConcN2O, CO2PercSat, CH4PercSat, and N2OPercSat.
+```{r }
+library(neonUtilities)
+library(neonDissGas)
+sdgDataPlusSat <- def.calc.sdg.sat(inputFile = sdgDataPlusConc)
+sdgDataPlusSat
+```
+
+TRANSLATION TO PYTHON: 
+
 
 ```{python}
 import os
