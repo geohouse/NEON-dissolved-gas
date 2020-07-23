@@ -68,6 +68,8 @@ import os
 os.chdir('/Users/marcelarodriguez/PycharmProjects/NEON-DissolvedGas')
 from def_calc_sdg_conc import def_calc_sdg_conc
 import pandas
+from numpy import nan
+import numpy as np
 
 gasConcentration = def_calc_sdg_conc(inputFile=r.sdgFormatted)
 

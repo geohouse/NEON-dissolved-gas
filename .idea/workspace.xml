@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7c51385e-5d0d-4d07-b58a-d6218cda2dbe" name="Default Changelist" comment="deleted unnecessary files">
-      <change afterPath="$PROJECT_DIR$/mkdexample.Rmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/translation.Rmd" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/def_calc_sdg_conc.py" beforeDir="false" afterPath="$PROJECT_DIR$/def_calc_sdg_conc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mkdexample.Rmd" beforeDir="false" afterPath="$PROJECT_DIR$/mkdexample.Rmd" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +53,28 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.testing">
+  <component name="RunManager" selected="Python.Python 3.7">
+    <configuration name="Python 3.7" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="NEON-DissolvedGas" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/venv/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/def_calc_sdg_conc.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="SDG_FORLOOP_WITHTRYCATCH_TEMPLATE.PY" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="NEON-DissolvedGas" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -73,19 +96,19 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="testing" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="def_calc_sdg_sat" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="NEON-DissolvedGas" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../Test/venv/bin/python" />
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/testing.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/def_calc_sdg_sat.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -96,11 +119,13 @@
     </configuration>
     <list>
       <item itemvalue="Python.SDG_FORLOOP_WITHTRYCATCH_TEMPLATE.PY" />
-      <item itemvalue="Python.testing" />
+      <item itemvalue="Python.Python 3.7" />
+      <item itemvalue="Python.def_calc_sdg_sat" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.testing" />
+        <item itemvalue="Python.Python 3.7" />
+        <item itemvalue="Python.def_calc_sdg_sat" />
         <item itemvalue="Python.SDG_FORLOOP_WITHTRYCATCH_TEMPLATE.PY" />
       </list>
     </recent_temporary>
@@ -275,10 +300,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="deleted unnecessary files" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="-1496" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1593814453911">
+    <state x="-1496" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1595539967581">
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
-    <state x="-1496" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1593814453911" />
+    <state x="-1496" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595539967580" />
     <state x="-1920" y="120" width="840" height="480" key="#xdebugger.XInspectDialog" timestamp="1593721629687">
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
@@ -300,34 +325,34 @@
     <state x="288" y="120" width="1152" height="739" key="DiffContextDialog/0.23.1440.814@0.23.1440.814" timestamp="1593374663097" />
     <state x="-1536" y="-12" width="1152" height="720" key="DiffContextDialog/0.23.1440.816/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1593554686221" />
     <state x="288" y="140" width="1152" height="720" key="DiffContextDialog/0.23.1440.877@0.23.1440.877" timestamp="1593199007030" />
-    <state width="1899" height="376" key="GridCell.Tab.0.bottom" timestamp="1593814819470">
+    <state width="1899" height="376" key="GridCell.Tab.0.bottom" timestamp="1595540018930">
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
-    <state width="1899" height="376" key="GridCell.Tab.0.bottom/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1593814819470" />
+    <state width="1899" height="376" key="GridCell.Tab.0.bottom/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595540018930" />
     <state width="1419" height="304" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1593379264458" />
     <state width="1899" height="377" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1593004686591" />
     <state width="1899" height="193" key="GridCell.Tab.0.bottom/0.23.1440.808/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1592853338756" />
     <state width="1899" height="333" key="GridCell.Tab.0.bottom/0.23.1440.877/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1593813651047" />
-    <state width="1899" height="376" key="GridCell.Tab.0.center" timestamp="1593814819469">
+    <state width="1899" height="376" key="GridCell.Tab.0.center" timestamp="1595540018927">
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
-    <state width="1899" height="376" key="GridCell.Tab.0.center/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1593814819469" />
+    <state width="1899" height="376" key="GridCell.Tab.0.center/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595540018927" />
     <state width="1419" height="304" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1593379264456" />
     <state width="1899" height="377" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1593004686590" />
     <state width="1899" height="193" key="GridCell.Tab.0.center/0.23.1440.808/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1592853338754" />
     <state width="1899" height="333" key="GridCell.Tab.0.center/0.23.1440.877/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1593813651045" />
-    <state width="1899" height="376" key="GridCell.Tab.0.left" timestamp="1593814819467">
+    <state width="1899" height="376" key="GridCell.Tab.0.left" timestamp="1595540018926">
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
-    <state width="1899" height="376" key="GridCell.Tab.0.left/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1593814819467" />
+    <state width="1899" height="376" key="GridCell.Tab.0.left/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595540018926" />
     <state width="1419" height="304" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1593379264453" />
     <state width="1899" height="377" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1593004686588" />
     <state width="1899" height="193" key="GridCell.Tab.0.left/0.23.1440.808/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1592853338753" />
     <state width="1899" height="333" key="GridCell.Tab.0.left/0.23.1440.877/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1593813651044" />
-    <state width="1899" height="376" key="GridCell.Tab.0.right" timestamp="1593814819469">
+    <state width="1899" height="376" key="GridCell.Tab.0.right" timestamp="1595540018929">
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
-    <state width="1899" height="376" key="GridCell.Tab.0.right/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1593814819469" />
+    <state width="1899" height="376" key="GridCell.Tab.0.right/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595540018929" />
     <state width="1419" height="304" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1593379264457" />
     <state width="1899" height="377" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1593004686590" />
     <state width="1899" height="193" key="GridCell.Tab.0.right/0.23.1440.808/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1592853338755" />

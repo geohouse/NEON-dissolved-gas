@@ -63,6 +63,11 @@
 #' @export
 
 ##############################################################################################
+import pandas as pd
+from numpy import nan
+import numpy as np
+
+
 def def_calc_sdg_conc(
     inputFile,
     volGas="gasVolume",
