@@ -48,11 +48,12 @@
 #' @seealso def_format_sdg.py for formatting dissolved gas data downloaded from NEON
 
 #' @export
-
-# changelog and author contributions / copyrights
-#   Kaelin M. Cawley (2018-04-23)
-#     original creation
 ##############################################################################################
+import pandas as pd
+from numpy import nan
+import numpy as np
+
+
 def def_calc_sdg_sat(
     inputFile,
     baro="barometricPressure",

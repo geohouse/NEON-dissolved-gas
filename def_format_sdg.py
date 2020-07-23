@@ -34,6 +34,13 @@
 #' concentrations and percent saturation, respectively
 
 ##############################################################################################
+import pandas as pd
+import os
+import os.path
+import re
+import numpy as np
+
+
 def def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater(1).zip'):
 
     ##### Default values ####
