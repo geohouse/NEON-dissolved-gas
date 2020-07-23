@@ -1,0 +1,164 @@
+table,fieldName,description,dataType,units,parserToCreate,entryValidationRulesParser,entryValidationRulesForm
+wpa_fieldSuperParent,uid,"Unique ID within NEON database; an identifier for the record",string,NA,"[CREATE_UID]",,
+wpa_fieldSuperParent,stationID,"Identifier for station where sample was collected",string,NA,,"[REQUIRE][NAMED_LOCATION_TYPE('AOS S2 named location type' OR 'AOS outlet named location type' OR 'AOS inlet named location type' OR 'AOS buoy named location type' OR 'AOS reach named location type' OR 'AOS groundwater well named location type')]","[REQUIRE][FROM_AOS_SPATIAL(IF(siteType='lake'),  AOS outlet named location type OR AOS inlet named location type OR AOS buoy named location type OR AOS groundwater well named location type)][FROM_AOS_SPATIAL(IF(siteType='stream'),  AOS S2 named location type OR AOS reach named location type OR AOS groundwater well named location type)][FROM_AOS_SPATIAL(IF(siteType='river'),  AOS buoy named location type OR AOS reach named location type OR AOS groundwater well named location type)]"
+wpa_fieldSuperParent,additionalCoordUncertainty,"Additional uncertainty to be added to the coordinate uncertainty at all sites",real,meter,,,"[IF (IS_BLANK(altLocation)), DEFAULT_TO (10)]"
+wpa_fieldSuperParent,altLocation,"Alternate Sampling Location description",string,NA,,"[ASCII]","[SURFACE ONLY]"
+wpa_fieldSuperParent,altLatitude,"Alternate Sampling Location coordinate - latitude",real,decimalDegree,,"[GREATER_THAN_OR_EQUAL_TO (15)][LESS_THAN_OR_EQUAL_TO (72)]","[SURFACE ONLY][GREATER_THAN_OR_EQUAL_TO (15)][LESS_THAN_OR_EQUAL_TO (72)]"
+wpa_fieldSuperParent,altLongitude,"Alternate Sampling Location coordinate - longitude",real,decimalDegree,,"[GREATER_THAN_OR_EQUAL_TO (180-)][LESS_THAN_OR_EQUAL_TO (60-)]","[SURFACE ONLY][GREATER_THAN_OR_EQUAL_TO (180-)][LESS_THAN_OR_EQUAL_TO (60-)]"
+wpa_fieldSuperParent,altCoordinateUncertainty,"The horizontal distance (in meters) from the given altLatitude and altLongitude describing the smallest circle containing the whole of the Location. Zero is not a valid value for this term",real,meter,,"[GREATER_THAN_OR_EQUAL_TO (0)][LESS_THAN_OR_EQUAL_TO (500)]","[SURFACE ONLY][GREATER_THAN_OR_EQUAL_TO (0)][LESS_THAN_OR_EQUAL_TO (500)]"
+wpa_fieldSuperParent,altGeodeticDatum,"Model used to measure horizontal position on the earth for alternate location coordinate",string,NA,,"[LOV]","[SURFACE ONLY][LOV]"
+wpa_fieldSuperParent,startDate,"The start date-time or interval during which an event occurred",dateTime,NA,"[CONVERT_TO_UTC(namedLocation)][collectDate]","[REQUIRE]","[REQUIRE][HIDDEN][DEFAULT_TO (collectDate)]"
+wpa_fieldSuperParent,collectDate,"Date of the collection event",dateTime,NA,"[CONVERT_TO_UTC(namedLocation)]","[REQUIRE]","[REQUIRE][DATE_FORMAT(YYYY-MM-DDTHH:MM)][SUGGESTED_ENTRY (systemDateTime)]"
+wpa_fieldSuperParent,aquaticSiteType,"Type of aquatic site, includes lake, river or stream",string,NA,,"[LOV]","[REQUIRE][FROM_AOS_SITE_TYPE]"
+wpa_fieldSuperParent,samplingImpractical,"Samples and/or measurements were not collected due to the indicated circumstance",string,NA,,"[LOV]","[LOV]"
+wpa_fieldSuperParent,waterChemSamplesCollected,"An indication of whether any water chemistry samples were collected",string,NA,,"[LOV]","[LOV]"
+wpa_fieldSuperParent,isotopeSamplesCollected,"An indication of whether any stable isotope samples were collected",string,NA,,"[LOV]","[LOV]"
+wpa_fieldSuperParent,sdgSampleCollected,"An indication of whether dissolved gas samples were collected. These are expected for all surface water samples, but not groundwater samples",string,NA,,"[LOV]","[LOV]"
+wpa_fieldSuperParent,microbeSamplesCollected,"An indication of whether any surface water microbe cell count samples were collected. These are expected for some surface water samples, but not groundwater samples",string,NA,,"[LOV]","[LOV]"
+wpa_fieldSuperParent,adequateSampleVol,"An indication of whether or not there was adequate sample volume available for collecting all samples. When no: samples are prioritized in this order: isotopes; filtered analytes; alkalinity titrations; unfiltered analytes; particulate analysis",string,NA,,"[LOV]","[LOV]"
+wpa_fieldSuperParent,parentSampleID,"Parent sampleID of sample being processed",string,NA,,"[DOES_NOT_EXIST][IF (IS_BLANK(samplingImpractical)), REQUIRE][MATCH_REGULAR_EXPRESSION('[A-Z]{4}.((?i)ss|in|ot|re|c[0-3]|w[1-8]).20[0-9]{2}(0[1-9]|1[012])(0[1-9]|1[0-9]|2[0-9]|3[01])')]","[IF (IS_BLANK(samplingImpractical)), REQUIRE][SITE & \\.\\ & namedLocation(xx) & \\.\\ & startDate(YYYYMMDD)]"
+wpa_fieldSuperParent,parentSampleFate,"Fate of a parent sample",string,NA,,"[ASCII]","[HIDDEN][DEFAULT_TO('active')]"
+wpa_fieldSuperParent,parentSampleCode,"Barcode of a parent sample",string,NA,,"[ASCII]","[HIDDEN]"
+wpa_fieldSuperParent,sampleClass,"Class of a sample",string,NA,,"[ASCII]","create sampleClass based on which protocols are sampled"
+wpa_fieldSuperParent,eventID,"An identifier for the set of information associated with the event, which includes information about the place and time of the event",string,NA,,"[ASCII]","[SITE & \\.\\ & YYYYMMDD]"
+wpa_fieldSuperParent,samplerType,"Type of sampler used to collect the sample",string,NA,,"[LOV]","[LOV]"
+wpa_fieldSuperParent,measurementDepth,"Depth at which a measurement was taken",real,meter,,"[LESS_THAN_OR_EQUAL_TO (40)]","[LESS_THAN_OR_EQUAL_TO (40)]"
+wpa_fieldSuperParent,dissolvedOxygen,"Dissolved Oxygen Concentration",real,milligramsPerLiter,,"[LESS_THAN_OR_EQUAL_TO (50)]","[LESS_THAN_OR_EQUAL_TO (50)]"
+wpa_fieldSuperParent,dissolvedOxygenSaturation,"Dissolved Oxygen Percent Saturation",real,percent,,"[LESS_THAN_OR_EQUAL_TO (500)]","[LESS_THAN_OR_EQUAL_TO (500)]"
+wpa_fieldSuperParent,specificConductance,"Conductivity auto-corrected to 25 degrees C",real,microsiemensPerCentimeter,,,"[LESS_THAN_OR_EQUAL_TO (9999)]"
+wpa_fieldSuperParent,waterTemp,"Temperature of water (C)",real,celsius,,"[GREATER_THAN_OR_EQUAL_TO (10-)][LESS_THAN_OR_EQUAL_TO (40)]","[GREATER_THAN_OR_EQUAL_TO (-10)][LESS_THAN_OR_EQUAL_TO (40)]"
+wpa_fieldSuperParent,pH,"Measurement of pH in sample",real,pH,,"[GREATER_THAN_OR_EQUAL_TO (0)][LESS_THAN_OR_EQUAL_TO (14)]","[GREATER_THAN_OR_EQUAL_TO (0)][LESS_THAN_OR_EQUAL_TO (14)]"
+wpa_fieldSuperParent,swcSamplingProtocolVersion,"The NEON document number and version of the water chemistry protocol where detailed information regarding the sampling method used is available; format NEON.DOC.######vX",string,NA,,"[LOV]","[IF (sampleClass contains swc), REQUIRE][LOV][SUGGESTED_ENTRY(previousValue)]"
+wpa_fieldSuperParent,asiSamplingProtocolVersion,"The NEON document number and version of the aquatic stable isotopes protocol where detailed information regarding the sampling method used is available; format NEON.DOC.######vX",string,NA,,"[LOV]","[IF (sampleClass contains asi), REQUIRE][LOV][SUGGESTED_ENTRY(previousValue)]"
+wpa_fieldSuperParent,amcSamplingProtocolVersion,"The NEON document number and version of the aquatic microbes protocol where detailed information regarding the sampling method used is available; format NEON.DOC.######vX",string,NA,,"[LOV]","[IF (sampleClass contains amc), REQUIRE][LOV][SUGGESTED_VALUE(previousValue)]"
+wpa_fieldSuperParent,sdgSamplingProtocolVersion,"The NEON document number and version of the dissolved gas protocol where detailed information regarding the sampling method used is available; format NEON.DOC.######vX",string,NA,,"[LOV]","[IF (sampleClass contains sdg), REQUIRE][LOV][SUGGESTED_ENTRY(previousValue)]"
+wpa_fieldSuperParent,lowerSegmentDepth,"Depth at bottom of stratified lake segment",real,meter,,"[GREATER_THAN_OR_EQUAL_TO (upperSegmentDepth)]","[SURFACE ONLY][GREATER_THAN_OR_EQUAL_TO (upperSegmentDepth)][IF (aquaticSiteType != 'stream'), WARN]"
+wpa_fieldSuperParent,upperSegmentDepth,"Depth at top of stratified lake segment",real,meter,,,"[SURFACE ONLY][IF (aquaticSiteType != 'stream'), WARN]"
+wpa_fieldSuperParent,maxDepth,"Maximum depth",real,meter,,"[LESS_THAN (40)]","[SURFACE ONLY][LESS_THAN (40)][IF (siteType != 'stream'), WARN]"
+wpa_fieldSuperParent,lakeSampleDepth1,"Sample depth of a single lake sample collected below the surface; the sample depth of the upper sample for a composite lake sample collected below the surface",real,meter,,"[LESS_THAN (40)]","[SURFACE ONLY][IF (stationID = c1 or c2), WARN][LESS_THAN (40)]"
+wpa_fieldSuperParent,lakeSampleDepth2,"Sample depth of the lower sample for a composite lake sample collected below the surface",real,meter,,"[GREATER_THAN_OR_EQUAL_TO(lakeSampleDepth1)][LESS_THAN (40)]","[SURFACE ONLY][IF (stationID = c1 or c2), WARN][GREATER_THAN_OR_EQUAL_TO(lakeSampleDepth2)][LESS_THAN (40)]"
+wpa_fieldSuperParent,pumpStartTime,"Time the pump was first started at the well",dateTime,NA,,"[LESS_THAN(collectDate)]","[GROUNDWATER ONLY][LESS_THAN(collectDate)]"
+wpa_fieldSuperParent,totalWellDepth,"Total well depth; used to calculate water column height",real,meter,,"[LESS_THAN_OR_EQUAL_TO (25)]","[GROUNDWATER ONLY][LESS_THAN_OR_EQUAL_TO (25)]"
+wpa_fieldSuperParent,wellDepthChanged,"Indicates whether or not the total well depth has changed by > 10 cm",string,NA,,"[LOV]","[GROUNDWATER ONLY][LOV]"
+wpa_fieldSuperParent,measTotalWellDepth,"Total well depth measured by field technicians when well depth has changed by > 10 cm",real,meter,,"[LESS_THAN_OR_EQUAL_TO (25)]","[GROUNDWATER ONLY][LESS_THAN_OR_EQUAL_TO (25)]"
+wpa_fieldSuperParent,wellWaterDepth,"Depth of water in well from top of well casing",real,meter,,"[LESS_THAN_OR_EQUAL_TO (25)]","[GROUNDWATER ONLY][LESS_THAN_OR_EQUAL_TO (25)]"
+wpa_fieldSuperParent,waterColumnHeight,"Height of the water column in the well; calculated as: total well depth - depth to water table",real,meter,"[totalWellDepth - wellWaterDepth]","[GREATER_THAN_OR_EQUAL_TO(0)]","[GROUNDWATER ONLY][totalWellDepth - wellWaterDepth]"
+wpa_fieldSuperParent,volume3Wells,"Three times the volume of the well",real,liter,"[IF(IS_NOT_BLANK(waterColumnHeight)),0.8*waterColumnHeight*3]",,"[GROUNDWATER ONLY][0.8*waterColumnHeight*3]"
+wpa_fieldSuperParent,sampleDepth,"Depth sample was collected",real,meter,,"[LESS_THAN_OR_EQUAL_TO (25)]","[GROUNDWATER ONLY][LESS_THAN_OR_EQUAL_TO (25)]"
+wpa_fieldSuperParent,sampleExtractionMethod,"Method used to extract the sample",string,NA,,"[LOV]","[GROUNDWATER ONLY][LOV]"
+wpa_fieldSuperParent,pumpPlacementDate,"The pump placement date-time for low-yield sampling method",dateTime,NA,,,"[GROUNDWATER ONLY]"
+wpa_fieldSuperParent,pumpPlacementDepth,"Depth of pump placement for low-yield method",real,meter,,"[LESS_THAN_OR_EQUAL_TO (25)]","[GROUNDWATER ONLY][LESS_THAN_OR_EQUAL_TO (25)]"
+wpa_fieldSuperParent,screenedIntervalDepth,"Depth to the screened interval for low-yield method calculations",real,meter,,"[LESS_THAN_OR_EQUAL_TO (25)]","[GROUNDWATER ONLY][LESS_THAN_OR_EQUAL_TO (25)]"
+wpa_fieldSuperParent,maxAllowableDrawdown,"Maximum allowable drawdown for low-yield method sampling",real,meter,,"[LESS_THAN_OR_EQUAL_TO (25)]","[GROUNDWATER ONLY][LESS_THAN_OR_EQUAL_TO (25)]"
+wpa_fieldSuperParent,wellVolumePurged,"Total volume removed from the well, prior to sampling",real,liter,,"[LESS_THAN (25)]","[GROUNDWATER ONLY][LESS_THAN (25)]"
+wpa_fieldSuperParent,wellRedeveloped,"Indication of whether the well was redeveloped just prior to sampling",string,NA,,"[LOV]","[GROUNDWATER ONLY][LOV]"
+wpa_fieldSuperParent,wellRedevelopedDate,"Date of well redevelopment",dateTime,NA,,"[IF (IS_NOT_BLANK(wellRedeveloped) & wellRedeveloped = 'Y'), REQUIRE]","[GROUNDWATER ONLY][IF (wellRedeveloped = \\Y\\), REQUIRE]"
+wpa_fieldSuperParent,waterClarityDescrip,"Qualitative description of water clarity",string,NA,,"[LOV]","[GROUNDWATER ONLY][LOV]"
+wpa_fieldSuperParent,waterColorDescrip,"Qualitative description of water color and clarity",string,NA,,"[LOV]","[GROUNDWATER ONLY][LOV]"
+wpa_fieldSuperParent,fulcrumVersion,"Version of the Fulcrum application used during data entry",string,NA,,"[ASCII]",
+wpa_fieldSuperParent,platformInfo,"Operating System and browser information (where applicable) of computer used during data entry",string,NA,,"[ASCII]",
+wpa_fieldSuperParent,aCollectedBy,"Primary NEON technician username who collected the data",string,NA,,"[ASCII]","[REQUIRE][FROM_PERSONNEL][SUGGESTED_ENTRY (previousValue)]"
+wpa_fieldSuperParent,bCollectedBy,"Secondary NEON technician username who collected the data",string,NA,,"[ASCII]","[FROM_PERSONNEL][SUGGESTED_ENTRY (previousValue)]"
+wpa_fieldSuperParent,remarks,"Technician notes; free text comments accompanying the record",string,NA,,"[ASCII]","[ASCII]"
+wpa_fieldSuperParent,fieldDataQF,"Data quality flag for field data",string,NA,,"[ASCII]",
+sdg_fieldDataAir,uid,"Unique ID within NEON database; an identifier for the record",string,NA,"[CREATE_UID]",,
+sdg_fieldDataAir,siteID,"NEON site code",string,NA,,"[NAMED_LOCATION_TYPE('SITE')]","[FROM_AOS_SPATIAL][REQUIRE]"
+sdg_fieldDataAir,startDate,"The start date-time or interval during which an event occurred",dateTime,NA,"[CONVERT_TO_UTC(namedLocation)][collectDate]",,"[MATCH_REGULAR_EXPRESSION(YYYY-MM-DDT##:##)][REQUIRE]"
+sdg_fieldDataAir,collectDate,"Date of the collection event",dateTime,NA,"[CONVERT_TO_UTC(namedLocation)]",,
+sdg_fieldDataAir,referenceAirSampleID,"Identifier for sample of reference air",string,NA,,"[DOES_NOT_EXIST][ASCII][MATCH_REGULAR_EXPRESSION('[A-Z]{4}\\.((?i)ss|in|ot|re|rs|c[0-3])\\.20[0-9]{2}(0[1-9]|1[012])(0[1-9]|1[0-9]|2[0-9]|3[01])\\.((?i)air)')]","[DEFAULT_TO(SITE.stationID.YYYYMMDD.air)]"
+sdg_fieldDataAir,referenceAirSampleCode,"Barcode for sample of reference air",string,NA,,"[ASCII]",
+sdg_fieldDataAir,referenceAirSampleFate,"Fate of a sample of reference air",string,NA,,"[ASCII]","[DEFAULT_TO('active')]"
+sdg_fieldDataAir,airVolumeSample,"Volume of background air injected into sample vial",real,milliliter,,"[LESS_THAN_OR_EQUAL_TO(40)]","[LESS_THAN_OR_EQUAL_TO(40)]"
+sdg_fieldDataAir,fulcrumVersion,"Version of the Fulcrum application used during data entry",string,NA,,"[ASCII]",
+sdg_fieldDataAir,platformInfo,"Operating System and browser information (where applicable) of computer used during data entry",string,NA,,"[ASCII]",
+sdg_fieldDataAir,remarks,"Technician notes; free text comments accompanying the record",string,NA,,"[ASCII]","[ASCII]"
+sdg_fieldDataAir,lowAirVolumeQF,"Quality flag for low air volume injected into evacuated vial",signed integer,NA,"[IF(IS_BLANK(airVolumeSample)), '-1'][IF(airVolumeSample < 12), '1'][IF(airVolumeSample >= 12), '0']",,
+sdg_fieldDataAir,sdgAirDataQF,"Data quality flag for dissolved gas reference air collection",string,NA,,"[ASCII]",
+sdg_fieldData,uid,"Unique ID within NEON database; an identifier for the record",string,NA,"[CREATE_UID]",,
+sdg_fieldData,stationID,"Identifier for station where sample was collected",string,NA,"[DERIVE_FROM_SAMPLE_TREE ('sdg' OR 'swc.sdg' OR 'asi.sdg' OR 'sdg.amc' OR 'swc.asi.sdg' OR 'swc.sdg.amc' OR 'asi.sdg.amc' OR 'swc.asi.sdg.amc')]","[NAMED_LOCATION_TYPE('AOS S2 named location type' OR 'AOS reach named location type' OR 'AOS inlet named location type' OR 'AOS outlet named location type' OR 'AOS buoy named location type')]","[FROM_AOS_SPATIAL][REQUIRE]"
+sdg_fieldData,startDate,"The start date-time or interval during which an event occurred",dateTime,NA,"[CONVERT_TO_UTC(namedLocation)][collectDate]",,"[MATCH_REGULAR_EXPRESSION(YYYY-MM-DDT##:##)][REQUIRE]"
+sdg_fieldData,collectDate,"Date of the collection event",dateTime,NA,"[CONVERT_TO_UTC(namedLocation)]",,"[DEFAULT_TO(sdg_fieldData_in.startDate)]"
+sdg_fieldData,parentSampleID,"Parent sampleID of sample being processed",string,NA,,"[EXISTS][ASCII]",
+sdg_fieldData,parentSampleCode,"Barcode of a parent sample",string,NA,,"[ASCII]",
+sdg_fieldData,parentSampleFate,"Fate of a parent sample",string,NA,,"[ASCII]","[DEFAULT_TO('active')]"
+sdg_fieldData,waterSampleID,"Unique identifier for the water sample to be equilibrated with air",string,NA,,"[DOES_NOT_EXIST][REQUIRE][ASCII]","[REQUIRE]"
+sdg_fieldData,waterSampleCode,"Barcode for the water sample to be equilibrated with air",string,NA,,"[ASCII]",
+sdg_fieldData,waterSampleFate,"Fate of the water sample to be equilibrated with air",string,NA,,"[ASCII]","[DEFAULT_TO('active')]"
+sdg_fieldData,fulcrumVersion,"Version of the Fulcrum application used during data entry",string,NA,,"[ASCII]",
+sdg_fieldData,platformInfo,"Operating System and browser information (where applicable) of computer used during data entry",string,NA,,"[ASCII]",
+sdg_fieldData,sdgFieldDataQF,"Data quality flag for dissolved gas field data",string,NA,,"[ASCII]",
+sdg_fieldDataProc,uid,"Unique ID within NEON database; an identifier for the record",string,NA,"[CREATE_UID]",,
+sdg_fieldDataProc,stationID,"Identifier for station where sample was collected",string,NA,"[DERIVE_FROM_SAMPLE_TREE ('sdg' OR 'swc.sdg' OR 'asi.sdg' OR 'sdg.amc' OR 'swc.asi.sdg' OR 'swc.sdg.amc' OR 'asi.sdg.amc' OR 'swc.asi.sdg.amc')]","[NAMED_LOCATION_TYPE('AOS S2 named location type' OR 'AOS reach named location type' OR 'AOS inlet named location type' OR 'AOS outlet named location type' OR 'AOS buoy named location type')]","[FROM_AOS_SPATIAL][REQUIRE]"
+sdg_fieldDataProc,startDate,"The start date-time or interval during which an event occurred",dateTime,NA,"[CONVERT_TO_UTC(namedLocation)][collectDate]",,
+sdg_fieldDataProc,collectDate,"Date of the collection event",dateTime,NA,"[CONVERT_TO_UTC(namedLocation)]",,
+sdg_fieldDataProc,processedDate,"Date or date and time of processing event",dateTime,NA,"[CONVERT_TO_UTC(namedLocation)]","[IF(collectDate>='2019-09-01'),GREATER_THAN_OR_EQUAL_TO(collectDate)]","[DEFAULT_TO(sdg_fieldDataProc_in.processedDate)]"
+sdg_fieldDataProc,waterSampleID,"Unique identifier for the water sample to be equilibrated with air",string,NA,,"[EXISTS][ASCII]","[DEFAULT_TO(sdg_fieldData_in.waterSampleID)]"
+sdg_fieldDataProc,waterSampleCode,"Barcode for the water sample to be equilibrated with air",string,NA,,"[ASCII]",
+sdg_fieldDataProc,waterSampleFate,"Fate of the water sample to be equilibrated with air",string,NA,,"[ASCII]","[DEFAULT_TO('processed')]"
+sdg_fieldDataProc,equilibratedAirSampleCond,"Condition of the sample of air that has been equilibrated with water (i.e. a mixture)",string,NA,,"[LOV]","[LOV]"
+sdg_fieldDataProc,equilibratedAirSampleID,"Identifier for sample of air that has been equilibrated with water (i.e., a mixture)",string,NA,,"[DOES_NOT_EXIST][ASCII][MATCH_REGULAR_EXPRESSION('[A-Z]{4}\\.((?i)ss|in|ot|re|rs|c[0-3])\\.20[0-9]{2}(0[1-9]|1[012])(0[1-9]|1[0-9]|2[0-9]|3[01])\\.((?i)wat)')]","[DEFAULT_TO(SITE.stationID.YYYYMMDD.wat)]"
+sdg_fieldDataProc,equilibratedAirSampleCode,"Barcode for a sample of air that has been equilibrated with water (i.e., a mixture)",string,NA,,"[ASCII]",
+sdg_fieldDataProc,equilibratedAirSampleFate,"Fate of a sample of air that has been equilibrated with water (i.e., a mixture)",string,NA,,"[ASCII]","[DEFAULT_TO('active')]"
+sdg_fieldDataProc,referenceAirSampleCond,"Condition of the reference air sample",string,NA,,"[LOV]","[LOV]"
+sdg_fieldDataProc,referenceAirSampleID,"Identifier for sample of reference air",string,NA,,"[EXISTS][ASCII]","[DEFAULT_TO(sdg_fieldDataAir_in.referenceAirSampleID)]"
+sdg_fieldDataProc,referenceAirSampleCode,"Barcode for sample of reference air",string,NA,,"[ASCII]",
+sdg_fieldDataProc,referenceAirSampleFate,"Fate of a sample of reference air",string,NA,,"[ASCII]","[DEFAULT_TO('active')]"
+sdg_fieldDataProc,storageWaterTemp,"Temperature of storage water",real,celsius,,"[GREATER_THAN_OR_EQUAL_TO(10-)][LESS_THAN_OR_EQUAL_TO(45)]","[GREATER_THAN_OR_EQUAL_TO(10-)][LESS_THAN_OR_EQUAL_TO(45)]"
+sdg_fieldDataProc,ptBarometricPressure,"Point (pt)-based barometric pressure, measured by a handheld device during sampling activity",real,kilopascal,,"[GREATER_THAN_OR_EQUAL_TO(35)][LESS_THAN_OR_EQUAL_TO(125)]","[GREATER_THAN_OR_EQUAL_TO(35)][LESS_THAN_OR_EQUAL_TO(125)][REQUIRE]"
+sdg_fieldDataProc,waterVolumeSyringe,"Volume of water in syringe",real,milliliter,,"[LESS_THAN_OR_EQUAL_TO(60)][REQUIRE]","[LESS_THAN_OR_EQUAL_TO(60)][REQUIRE]"
+sdg_fieldDataProc,gasVolumeSyringe,"Volume of air in syringe",real,milliliter,,"[LESS_THAN_OR_EQUAL_TO(60)][REQUIRE]","[LESS_THAN_OR_EQUAL_TO(60)][REQUIRE]"
+sdg_fieldDataProc,fulcrumVersion,"Version of the Fulcrum application used during data entry",string,NA,,"[ASCII]",
+sdg_fieldDataProc,platformInfo,"Operating System and browser information (where applicable) of computer used during data entry",string,NA,,"[ASCII]",
+sdg_fieldDataProc,gasVolumeSample,"Volume of sample gas injected into sample vial",real,milliliter,,"[LESS_THAN_OR_EQUAL_TO(25)]","[LESS_THAN_OR_EQUAL_TO(25)]"
+sdg_fieldDataProc,remarks,"Technician notes; free text comments accompanying the record",string,NA,,"[ASCII]","[ASCII]"
+sdg_fieldDataProc,lowGasVolumeQF,"Quality flag for low gas volume injected into evacuated vial",signed integer,NA,"[IF(IS_BLANK(gasVolumeSample)), '-1'][IF(gasVolumeSample < 12), '1'][IF(gasVolumeSample >= 12), '0']",,
+sdg_fieldDataProc,sdgProcessDataQF,"Data quality flag for dissolved gas field processing",string,NA,,"[ASCII]",
+sdg_externalLabData,uid,"Unique ID within NEON database; an identifier for the record",string,NA,"[CREATE_UID]",,
+sdg_externalLabData,stationID,"Identifier for station where sample was collected",string,NA,"[DERIVE_FROM_SAMPLE_TREE('sdg_fieldDataAir_in.referenceAirSampleID' OR 'audit_sample')]","[NAMED_LOCATION_TYPE('SITE' OR 'External Lab')]",
+sdg_externalLabData,startDate,"The start date-time or interval during which an event occurred",dateTime,NA,"[DERIVE_FROM_SAMPLE_TREE('sdg_fieldDataAir_in.referenceAirSampleID' OR 'audit_sample')]",,
+sdg_externalLabData,collectDate,"Date of the collection event",dateTime,NA,"[DERIVE_FROM_SAMPLE_TREE('sdg_fieldDataAir_in.referenceAirSampleID' OR 'audit_sample')]",,
+sdg_externalLabData,analysisDate,"Date that the sample was analyzed",dateTime,NA,"[CONVERT_TO_UTC(laboratoryName)]",,
+sdg_externalLabData,internalLabID,"Internal identifier used by the external facility",string,NA,,"[ASCII]",
+sdg_externalLabData,shipmentReceivedDate,"Date a sample was received",dateTime,NA,,,
+sdg_externalLabData,internalSampleName,"Internal lab specific identifier",string,NA,,"[ASCII]",
+sdg_externalLabData,internalLabFileName,"Internal lab specific file name for raw data",string,NA,,"[ASCII]",
+sdg_externalLabData,concentrationCH4,"Concentration of CH4 in sample",real,partsPerMillionVolumetric,,,
+sdg_externalLabData,concentrationCO2,"Concentration of CO2 in sample",real,partsPerMillionVolumetric,,,
+sdg_externalLabData,concentrationN2O,"Concentration of N2O in sample",real,partsPerMillionVolumetric,,,
+sdg_externalLabData,sampleID,"Identifier for sample",string,NA,,"[EXISTS][REQUIRE][ASCII]",
+sdg_externalLabData,sampleCode,"Barcode of a sample",string,NA,,"[ASCII]",
+sdg_externalLabData,sampleFate,"Fate of a sample",string,NA,"[DEFAULT_TO('discarded')]","[ASCII]",
+sdg_externalLabData,shipmentID,"Unique identifier associated with shipment",string,NA,,"[ASCII]",
+sdg_externalLabData,receivedBy,"Anonymized name of lab personnel receiving the shipment",string,NA,,"[ASCII]",
+sdg_externalLabData,sampleCondition,"Condition of a sample",string,NA,,"[LOV]",
+sdg_externalLabData,laboratoryName,"Name of the laboratory or facility that is processing the sample",string,NA,"[DEFAULT_TO_LAB_LOGGED_IN]","[NAMED_LOCATION_TYPE('External Lab')]",
+sdg_externalLabData,analyzedBy,"Name of lab personnel analyzing sample",string,NA,,"[ASCII]",
+sdg_externalLabData,externalRemarks,"External lab notes; free text comments accompanying the record",string,NA,,"[ASCII]",
+sdg_externalLabData,volumeGasAnalyzed,"Amount of gas sample analyzed",real,milliliter,,,
+sdg_externalLabData,runDetectionLimitCH4,"Run detection limit - CH4ppm",real,partsPerMillionVolumetric,,,
+sdg_externalLabData,runDetectionLimitCO2,"Run detection limit - CO2ppm",real,partsPerMillionVolumetric,,,
+sdg_externalLabData,runDetectionLimitN2O,"Run detection limit - N2Oppm",real,partsPerMillionVolumetric,,,
+sdg_externalLabData,precisionCH4,"Precision (CV%) - CH4ppm",real,percent,,,
+sdg_externalLabData,precisionCO2,"Precision (CV%) - CO2ppm",real,percent,,,
+sdg_externalLabData,precisionN2O,"Precision (CV%) - N2Oppm",real,percent,,,
+sdg_externalLabData,gasStandardAccuracy,"Accuracy of standards used for gas calibration",real,NA,,,
+sdg_externalLabData,sdgExternalLabDataQF,"Data quality flag for dissolved gas external laboratory data",string,NA,,"[ASCII]",
+sdg_externalLabData,gasCheckStandardPercentDev,"Calculated percent deviation of the run for the gas check standards",real,percent,,,
+sdg_externalLabData,gasCheckStandardQF,"Quality flag indicating when the gas check standard percent deviation is above 2 %; 0 indicates percent deviation less than 2 %; 1 indicates percent deviation 2 % or above; and -1 indicates that the test could not be performed",signed integer,NA,"[IF(gasCheckStandardPercentDev>=2),1][IF(gasCheckStandardPercentDev<2),0][IF(IS_BLANK(gasCheckStandardPercentDev)), '-1']",,
+sdg_externalLabSummaryData,uid,"Unique ID within NEON database; an identifier for the record",string,NA,"[CREATE_UID]",,
+sdg_externalLabSummaryData,laboratoryName,"Name of the laboratory or facility that is processing the sample",string,NA,"[DEFAULT_TO_LAB_LOGGED_IN]","[NAMED_LOCATION_TYPE('External Lab')]",
+sdg_externalLabSummaryData,startDate,"The start date-time or interval during which an event occurred",dateTime,NA,"[UPLOAD_DATE]",,
+sdg_externalLabSummaryData,endDate,"The end date-time or interval during which an event occurred",dateTime,NA,"[UPLOAD_DATE]",,
+sdg_externalLabSummaryData,analyte,"Analyte or parameter measured",string,NA,,"[LOV][REQUIRE]",
+sdg_externalLabSummaryData,method,"Published method used for analysis",string,NA,,"[ASCII][REQUIRE]",
+sdg_externalLabSummaryData,methodDetectionLimit,"Detection limit for method used",real,NA,,"[REQUIRE]",
+sdg_externalLabSummaryData,methodDetectionLimitUnits,"Units of detection limit for method used",string,NA,,"[REQUIRE][LOV]",
+sdg_externalLabSummaryData,instrument,"Type of instrument used for the analysis",string,NA,,"[ASCII][REQUIRE]",
+sdg_externalLabSummaryData,precision,"Closeness of agreement between indications or measured quantity values obtained by replicate measurements on the same or similar objects under specified conditions",real,NA,,,
+sdg_externalLabSummaryData,precisionUnits,"Units of reported precision",string,NA,"[IF(IS_NOT_BLANK(precision)),DEFAULT_TO('percent')]",,
+sdg_externalLabSummaryData,measurementUncertainty,"Parameter, associated with the result of a measurement, that characterizes the dispersion of the values that could reasonably be attributed to the measurant",real,NA,,"[REQUIRE]",
+sdg_externalLabSummaryData,measurementUncertaintyUnits,"Units of measurement uncertainty",string,NA,"[DEFAULT_TO('percent')]",,
+sdg_externalLabSummaryData,labSpecificStartDate,"Date a specific analyte, instrument, and associated method detection limit combination started",dateTime,NA,"[CONVERT_TO_UTC(laboratoryName)]","[REQUIRE]",
+sdg_externalLabSummaryData,labSpecificEndDate,"Date a specific analyte, instrument, and associated method detection limit combination ended",dateTime,NA,"[CONVERT_TO_UTC(laboratoryName)]",,
+sdg_externalLabSummaryData,remarks,"Technician notes; free text comments accompanying the record",string,NA,,"[ASCII]",
+sdg_externalLabSummaryData,dataQF,"Data quality flag",string,NA,,"[ASCII]",
