@@ -14,19 +14,7 @@ The following R markdown compares the R to Python scripts by displaying the outp
 R scripts are loaded above the Python script translation. The first data frame corresponds to the formatted data frame, 
 which will be used as the base to both R and Python scripts below. 
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Initiation of Python
 
-```{r}
-library(reticulate)
-use_python("~/venv/bin/python", required = TRUE)
-```
-
-Check if the version of Python you are using is the same as the Python the code was written (correct version: 3.7.7)
-```{python}
-import sys
-print(sys.version)
-```
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Loading devtools library, setting the working dictionary, and installing 'neonDissGas'.
@@ -61,6 +49,19 @@ library(neonDissGas)
 sdgDataPlusConc <- def.calc.sdg.conc(inputFile = sdgFormatted)
 sdgDataPlusConc
 ```
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Initiation of Python
+
+```{r}
+library(reticulate)
+use_python("~/venv/bin/python", required = TRUE)
+```
+
+Check if the version of Python you are using is the same as the Python the code was written (correct version: 3.7.7)
+```{python}
+import sys
+print(sys.version)
+```
 
 TRANSLATION TO PYTHON: 
 
@@ -69,6 +70,8 @@ import os
 os.chdir('/Users/marcelarodriguez/PycharmProjects/NEON-DissolvedGas')
 from def_calc_sdg_conc import def_calc_sdg_conc
 import pandas
+from numpy import nan
+import numpy as np
 
 gasConcentration = def_calc_sdg_conc(inputFile=r.sdgFormatted)
 
