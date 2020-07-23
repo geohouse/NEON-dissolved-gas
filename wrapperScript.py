@@ -2,7 +2,7 @@
 #from def_cal_sdg_conc import def_cal_sdg_conc
 
 import def_format_sdg as deffg
-import def_cal_sdg_conc as defcsc
+import def_calc_sdg_conc as defcsc
 
 import os
 

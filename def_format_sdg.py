@@ -33,26 +33,8 @@
 #' @seealso def_calc_sdg_conc.py and def_calc_sdg_sat.py for calculating dissolved gas
 #' concentrations and percent saturation, respectively
 
-import pandas as pd
-import os
-import os.path
-import re
-import numpy as np
-
-import rpy2
-import rpy2.robjects as robjects
-from rpy2.robjects.packages import importr
-
-utils = importr('utils')
-
-utils.install_packages('neonUtilities', repos='https://cran.rstudio.com/')
-neonUtilities = importr('neonUtilities')
-
-
-# -----------------------------------------------------------------------------------------------#
-
-
-def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip'):
+##############################################################################################
+def def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater(1).zip'):
 
     ##### Default values ####
     volH2O = 40 #mL
@@ -118,13 +100,14 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
     # Populate the output file with field data
     for k in range(len(outputDF.columns)):
         if outputDF.columns[k] in fieldDataProc.columns:
-            outputDF.iloc[:,k] = fieldDataProc.loc[:,fieldDataProc.columns == outputDF.columns[k]]
+            outputDF.iloc[:, k] = fieldDataProc.loc[:,fieldDataProc.columns == outputDF.columns[k]]
 
     outputDF['headspaceTemp'] = fieldDataProc['storageWaterTemp']
     outputDF['barometricPressure'] = fieldDataProc['ptBarometricPressure']
     outputDF['waterVolume'] = fieldDataProc['waterVolumeSyringe']
     outputDF['gasVolume'] = fieldDataProc['gasVolumeSyringe']
     outputDF['stationID'] = fieldDataProc['namedLocation']
+
 
     #Populate the output file with external lab data
     for l in range(len(outputDF['waterSampleID'])):
@@ -158,6 +141,15 @@ def def_format_sdg(data_dir = os.getcwd() + '/NEON_dissolved-gases-surfacewater.
                 outputDF.loc[outputDF.index[[m]], 'headspaceTemp'] = fieldSuperParent.loc[fieldSuperParent.loc[:, 'parentSampleID'] == outputDF.loc[outputDF.index[[m]], 'waterSampleID'].item(), 'waterTemp'].item()
             except Exception:
                 pass
+
+    #Convert values to floats since they default to object
+    outputDF['waterTemp'] = outputDF.waterTemp.astype(float)
+    outputDF['concentrationCO2Air'] = outputDF.concentrationCO2Air.astype(float)
+    outputDF['concentrationCO2Gas'] = outputDF.concentrationCO2Gas.astype(float)
+    outputDF['concentrationCH4Air'] = outputDF.concentrationCH4Air.astype(float)
+    outputDF['concentrationCH4Gas'] = outputDF.concentrationCH4Gas.astype(float)
+    outputDF['concentrationN2OAir'] = outputDF.concentrationN2OAir.astype(float)
+    outputDF['concentrationN2OGas'] = outputDF.concentrationN2OGas.astype(float)
 
     # Flag values below detection (TBD)
     return outputDF

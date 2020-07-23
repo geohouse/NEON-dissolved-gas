@@ -1,14 +1,58 @@
-from math import exp
-import os
+##############################################################################################
+#' @title Dissolved Gas Percent Saturation Calculations
 
-import mpmath as mpmath
-import pandas as pd
-from numpy import character, nan, math
-import numpy as np
-import def_format_sdg as deffg
-import def_cal_sdg_conc as defcsc
-from decimal import Decimal
+#' @author
+#' Marcela Rodriguez \email{rodriguezm@battelleecology.org} \cr
 
+#' @description This function calculates dissolved CO2, CH4, and N2O percent saturation from
+#' water dissolved gas concentration (molar), water temperature (celsius), barometric pressure
+#' (kPa), and reference air gas concentrations (ppmv).
+
+#' @param inputFile Name of the data frame containing the information needed to calculate
+#' the dissolved gas percent saturation. If the headers are named: barometricPressure",
+#' "waterTemp", "dissolvedCO2", "concentrationCO2Air", "dissolvedCH4", "concentrationCH4Air",
+#' "dissolvedN2O", "concentrationN2OAir", respectively, no other inputs are required. Otherwise,
+#' the names of the columns containing the data must be specified.
+#' @param baro Column name containing the data for barometric pressure at the time of
+#' equilibration (kPa) [string]
+#' @param waterTemp Column name containing the data for temperature of the waterbody when
+#' sampled (celsius) [string]
+#' @param headspaceTemp Column name containing the data for temperature of the water sample
+#' during the headspace equilibration (celsius) [string]
+#' @param concCO2 Column name containing the data for concentration of carbon dioxide in the
+#' water (M) [string]
+#' @param sourceCO2 Column name containing the data for concentration of carbon dioxide in
+#' headspace source gas (ppmv) [string]
+#' @param concCH4 Column name containing the data for concentration of methane in the
+#' water (M) [string]
+#' @param sourceCH4 Column name containing the data for concentration methane in headspace
+#' source gas (ppmv) [string]
+#' @param concN2O Column name containing the data for concentration of nitrous oxide in the
+#' water (M) [string]
+#' @param sourceN2O Column name containing the data for concentration of nitrous oxide in
+#' headspace source gas (ppmv) [string]
+
+#' @return This function returns dissolved CO2, CH4, and N2O concentrations in surface water [M] based on headspace equilibration data.
+#'   Function also returns dissolved 100% saturation concentrations  [M] of CO2, CH4, and N2O in surface waters.
+#'   Outputs are appended as additional columns to the input data frame
+
+#' @references
+#' License: GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007
+
+#' @keywords dissolved gases, methane, CH4, carbon dioxide, CO2, nitrous oxide, N2O, surface water, aquatic, streams, lakes, rivers
+
+#' @examples
+#' #where the data frame "sdgFormatted" is already read in
+#' #sdgDataPlusSat = def_calc_sdg_sat(inputFile = sdgFormatted)
+
+#' @seealso def_format_sdg.py for formatting dissolved gas data downloaded from NEON
+
+#' @export
+
+# changelog and author contributions / copyrights
+#   Kaelin M. Cawley (2018-04-23)
+#     original creation
+##############################################################################################
 def def_calc_sdg_sat(
     inputFile,
     baro="barometricPressure",
@@ -50,21 +94,17 @@ def def_calc_sdg_sat(
 
     inputFile.loc[:, sourceN2O] = inputFile.loc[:, sourceN2O].replace(nan, 0.330)  #https://www.esrl.noaa.gov/gmd/hats/combined/N2O.html
 
-    ##### Calculate dissolved gas concentration at 100% saturation #####
 
+    ##### Calculate dissolved gas concentration at 100% saturation #####
     # 100% saturation occurs when the dissolved gas concentration is in equilibrium
     # with the atmosphere.
     inputFile['satConcCO2'] = np.nan
-    test = inputFile.loc[:, waterTemp]
-  #  inputFile['satConcCO2'] = (ckHCO2 * np.exp(cdHdTCO2 * (1 / ((test.astype(np.float64)) + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceCO2] * inputFile.loc[:, baro] * cPresConv
-    #for i in inputFile['satConcCO2']:
-    inputFile['satConcCO2'] = (ckHCO2 * np.exp(cdHdTCO2 * (1 / ((test.astype(np.float)) + cKelvin) - 1 / cT0))) * inputFile.loc[:,sourceCO2] * inputFile.loc[:, baro] * cPresConv
-       # "{:.2E}".format(Decimal(i))
- #   inputFile['satConcCO2'] = (ckHCO2 * np.exp(cdHdTCO2 * (1 / ((test.astype(np.float64)) + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceCO2] * inputFile.loc[:, baro] * cPresConv
+    inputFile['satConcCO2'] = (ckHCO2 * np.exp(cdHdTCO2 * (1 / (inputFile.loc[:, waterTemp] + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceCO2] * inputFile.loc[:, baro] * cPresConv
     inputFile['satConcCH4'] = np.nan
-  #  inputFile['satConcCH4'] = (ckHCH4 * np.exp(cdHdTCH4 * (1 / ((test.astype(np.float64)) + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceCH4] * inputFile.loc[:, baro] * cPresConv
+    inputFile['satConcCH4'] = (ckHCH4 * np.exp(cdHdTCH4 * (1 / (inputFile.loc[:, waterTemp] + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceCH4] * inputFile.loc[:, baro] * cPresConv
     inputFile['satConcN2O'] = np.nan
- #   inputFile['satConcN2O'] = (ckHN2O * np.exp(cdHdTN2O * (1 / ((test.astype(np.float64)) + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceN2O] * inputFile.loc[:, baro] * cPresConv
+    inputFile['satConcN2O'] = (ckHN2O * np.exp(cdHdTN2O * (1 / (inputFile.loc[:, waterTemp] + cKelvin) - 1 / cT0))) * inputFile.loc[:, sourceN2O] * inputFile.loc[:, baro] * cPresConv
+
 
     ##### Calculate dissolved gas concentration as % saturation #####                                ['satConcCO2']
     inputFile['CO2PercSat'] = inputFile.loc[:, concCO2] / inputFile['satConcCO2'] * cConcPerc
@@ -73,7 +113,3 @@ def def_calc_sdg_sat(
 
     return inputFile
 
-
-sdgFormatted = deffg.def_format_sdg(data_dir=os.getcwd() + '/NEON_dissolved-gases-surfacewater.zip')
-sdgDataPlusConc = defcsc.def_cal_sdg_conc(inputFile=sdgFormatted)
-inputFile = def_calc_sdg_sat(inputFile=sdgDataPlusConc)
