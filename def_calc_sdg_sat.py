@@ -53,6 +53,10 @@
 #   Kaelin M. Cawley (2018-04-23)
 #     original creation
 ##############################################################################################
+import pandas as pd
+from numpy import nan, np
+
+
 def def_calc_sdg_sat(
     inputFile,
     baro="barometricPressure",
