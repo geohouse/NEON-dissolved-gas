@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7c51385e-5d0d-4d07-b58a-d6218cda2dbe" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mkdexample.Rmd" beforeDir="false" afterPath="$PROJECT_DIR$/translation.Rmd" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -257,7 +258,21 @@
       <option name="project" value="LOCAL" />
       <updated>1595537093393</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="added imports">
+      <created>1595537212427</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1595537212427</updated>
+    </task>
+    <task id="LOCAL-00022" summary="deleted imports">
+      <created>1595537432440</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1595537432440</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -289,7 +304,8 @@
     <MESSAGE value="deleted unnecessary files" />
     <MESSAGE value="changes to markdown" />
     <MESSAGE value="added imports" />
-    <option name="LAST_COMMIT_MESSAGE" value="added imports" />
+    <MESSAGE value="deleted imports" />
+    <option name="LAST_COMMIT_MESSAGE" value="deleted imports" />
   </component>
   <component name="WindowStateProjectService">
     <state x="-1496" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1595536934567">
@@ -305,10 +321,10 @@
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
     <state x="-909" y="286" width="667" height="579" key="#xdebugger.evaluate/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1593724492826" />
-    <state x="-1334" y="-38" width="1164" height="795" key="CommitChangelistDialog2" timestamp="1595537212277">
+    <state x="-1334" y="-38" width="1164" height="795" key="CommitChangelistDialog2" timestamp="1595537432300">
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
-    <state x="-1334" y="-38" width="1164" height="795" key="CommitChangelistDialog2/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595537212277" />
+    <state x="-1334" y="-38" width="1164" height="795" key="CommitChangelistDialog2/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595537432300" />
     <state x="347" y="112" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1593105411231" />
     <state x="-1536" y="-12" width="1152" height="720" key="DiffContextDialog" timestamp="1595536745057">
       <screen x="-1920" y="-180" width="1920" height="1080" />
@@ -377,10 +393,10 @@
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
     <state x="-1451" y="-1" key="SettingsEditor/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595536944134" />
-    <state x="-1360" y="88" key="Vcs.Push.Dialog.v2" timestamp="1595537214834">
+    <state x="-1360" y="88" key="Vcs.Push.Dialog.v2" timestamp="1595537433833">
       <screen x="-1920" y="-180" width="1920" height="1080" />
     </state>
-    <state x="-1360" y="88" key="Vcs.Push.Dialog.v2/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595537214834" />
+    <state x="-1360" y="88" key="Vcs.Push.Dialog.v2/0.0.1440.900/-1920.-180.1920.1080@-1920.-180.1920.1080" timestamp="1595537433833" />
     <state x="420" y="223" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1593105413112" />
     <state x="-1432" y="72" key="com.intellij.execution.console.ConsoleHistoryController$MyBrowseAction$1" timestamp="1593720888177">
       <screen x="-1920" y="-180" width="1920" height="1080" />
